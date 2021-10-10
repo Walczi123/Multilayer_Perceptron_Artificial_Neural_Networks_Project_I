@@ -1,4 +1,6 @@
+import numpy as np
 from typing import Callable
+
 from activation_functions import sigmoid
 
 
@@ -25,7 +27,18 @@ class MLP:
         self.learning_rate = learning_rate
         self.learning_coefficient = learning_coefficient
 
-        self.weights = None
+        # Init weights
+        self.weights = []
+        for i in range(len(layers)-2):
+            w = np.random.randn(layers[i] + 1, layers[i + 1])
+            print("w", w,"\n")
+            self.weights.append(w / np.sqrt(layers[i]))
+        
+        w = np.random.randn(layers[-2] + 1, layers[-1])
+        print("w", w,"\n")
+        self.weights.append(w / np.sqrt(layers[-2]))
+
+        print(self.weights)
 
     def backpropagation(self):
         pass
@@ -51,5 +64,9 @@ class MLP:
 
 
 if __name__ == "__main__":
-    perceptron = MLP([2, 2, 1], sigmoid, sigmoid, 1, 1, 1, 1)
-    perceptron.predict()
+    # perceptron = MLP([2, 2, 1], sigmoid, sigmoid, 1, 1, 1, 1)
+    # perceptron.predict()
+
+    a = [[1,2],[3,4],[5,6]]
+    b = [1,2,3]
+    print(np.dot(b,a))
