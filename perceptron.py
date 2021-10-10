@@ -1,7 +1,6 @@
 from activation_functions import sigmoid
 
-
-class PerceptronNN:
+class MLP:
     """
     Neural Network Class
     """
@@ -26,5 +25,5 @@ class PerceptronNN:
         pass
 
 if __name__ == "__main__":
-    perceptron = PerceptronNN([2, 2, 1], sigmoid)
+    perceptron = MLP([2, 2, 1], sigmoid)
     perceptron.predict()
