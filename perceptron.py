@@ -25,6 +25,8 @@ class MLP:
         self.learning_rate = learning_rate
         self.learning_coefficient = learning_coefficient
 
+        self.weights = None
+
     def backpropagation(self):
         pass
 
@@ -32,8 +34,14 @@ class MLP:
         x = self.activation_function(2)
         print(x)
 
-    def train(self):
-        pass
+    def train(self, data_set):
+        for _ in range(self.epochs):
+            delta_weights = 0
+
+            for (X, Y) in data_set:
+                output = self.feed_forward(X)
+                delta_weights = self.backpropagation(output, Y)
+                self.weights += delta_weights
 
     def predict(self):
         return self.feed_forward()
