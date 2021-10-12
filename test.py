@@ -25,6 +25,8 @@ class NeuralNetwork:
             w = np.random.randn(layers[i] + 1, layers[i + 1] + 1)
             self.W.append(w / np.sqrt(layers[i]))
 
+        print("W",self.W)
+
     def __repr__(self):
         # construct and return a string that represents the network
         # architecture
@@ -43,24 +45,25 @@ class NeuralNetwork:
 		# insert a column of 1's as the last entry in the feature
 		# matrix -- this little trick allows us to treat the bias
 		# as a trainable parameter within the weight matrix
-		X = np.c_[X, np.ones((X.shape[0]))]
+        X = np.c_[X, np.ones((X.shape[0]))]
 		# loop over the desired number of epochs
-		for epoch in np.arange(0, epochs):
-			# loop over each individual data point and train
-			# our network on it
-			for (x, target) in zip(X, y):
-				self.fit_partial(x, target)
-			# check to see if we should display a training update
-			if epoch == 0 or (epoch + 1) % displayUpdate == 0:
-				loss = self.calculate_loss(X, y)
-				print("[INFO] epoch={}, loss={:.7f}".format(
-					epoch + 1, loss))
+        for epoch in np.arange(0, epochs):
+            # loop over each individual data point and train
+            # our network on it
+            for (x, target) in zip(X, y):
+                self.fit_partial(x, target)
+            # check to see if we should display a training update
+            if epoch == 0 or (epoch + 1) % displayUpdate == 0:
+                loss = self.calculate_loss(X, y)
+                print("[INFO] epoch={}, loss={:.7f}".format(
+                    epoch + 1, loss))
 
     def fit_partial(self, x, y):
         # construct our list of output activations for each layer
         # as our data point flows through the network; the first
         # activation is a special case -- it's just the input
         # feature vector itself
+        print("x",x)
         A = [np.atleast_2d(x)]
         print("A = [np.atleast_2d(x)]", A)
         # FEEDFORWARD:
@@ -86,6 +89,8 @@ class NeuralNetwork:
         # difference between our *prediction* (the final output
         # activation in the activations list) and the true target
         # value
+        print("A[-1]", A[-1])
+        print("y", y)
         error = A[-1] - y
         print("error", error)
         # from here, we need to apply the chain rule and build our
@@ -123,38 +128,39 @@ class NeuralNetwork:
             # this value by some small learning rate and adding to our
             # weight matrix -- this is where the actual "learning" takes
             # place
+            print("1. self.W[layer]", self.W[layer])
             self.W[layer] += -self.alpha * A[layer].T.dot(D[layer])
-            print("self.W[layer]", self.W[layer])
+            print("2. self.W[layer]", self.W[layer])
 
     def predict(self, X, addBias=True):
 		# initialize the output prediction as the input features -- this
 		# value will be (forward) propagated through the network to
 		# obtain the final prediction
-		p = np.atleast_2d(X)
-		# check to see if the bias column should be added
-		if addBias:
-			# insert a column of 1's as the last entry in the feature
-			# matrix (bias)
-			p = np.c_[p, np.ones((p.shape[0]))]
-		# loop over our layers in the network
-		for layer in np.arange(0, len(self.W)):
-			# computing the output prediction is as simple as taking
-			# the dot product between the current activation value 'p'
-			# and the weight matrix associated with the current layer,
-			# then passing this value through a nonlinear activation
-			# function
-			p = self.sigmoid(np.dot(p, self.W[layer]))
-		# return the predicted value
-		return p
+        p = np.atleast_2d(X)
+        # check to see if the bias column should be added
+        if addBias:
+            # insert a column of 1's as the last entry in the feature
+            # matrix (bias)
+            p = np.c_[p, np.ones((p.shape[0]))]
+        # loop over our layers in the network
+        for layer in np.arange(0, len(self.W)):
+            # computing the output prediction is as simple as taking
+            # the dot product between the current activation value 'p'
+            # and the weight matrix associated with the current layer,
+            # then passing this value through a nonlinear activation
+            # function
+            p = self.sigmoid(np.dot(p, self.W[layer]))
+        # return the predicted value
+        return p
 
     def calculate_loss(self, X, targets):
 		# make predictions for the input data points then compute
 		# the loss
-		targets = np.atleast_2d(targets)
-		predictions = self.predict(X, addBias=False)
-		loss = 0.5 * np.sum((predictions - targets) ** 2)
-		# return the loss
-		return loss
+        targets = np.atleast_2d(targets)
+        predictions = self.predict(X, addBias=False)
+        loss = 0.5 * np.sum((predictions - targets) ** 2)
+        # return the loss
+        return loss
 
 if __name__ == "__main__":
     # construct the XOR dataset
