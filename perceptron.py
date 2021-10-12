@@ -1,5 +1,5 @@
 import numpy as np
-from typing import Callable
+# from typing import Callable
 
 from activation_functions import sigmoid
 
@@ -9,7 +9,9 @@ class MLP:
     Neural Network Class
     """
 
-    def __init__(self, layers: list, activation_function: Callable, transfer_function: Callable, epochs: int, learning_rate: float, learning_coefficient: float, seed: int):
+    # def __init__(self, layers:list, activation_function: Callable, transfer_function: Callable, epochs: int, learning_rate: float, learning_coefficient: float, seed: int):
+    def __init__(self, layers, activation_function, transfer_function, epochs, learning_rate, learning_coefficient, seed):
+
         """
         Args:
             layers (list): list of layers in the network
@@ -31,21 +33,30 @@ class MLP:
         self.weights = []
         for i in range(len(layers)-2):
             w = np.random.randn(layers[i] + 1, layers[i + 1])
-            print("w", w,"\n")
+            # print("w", w,"\n")
             self.weights.append(w / np.sqrt(layers[i]))
         
         w = np.random.randn(layers[-2] + 1, layers[-1])
-        print("w", w,"\n")
+        # print("w", w,"\n")
         self.weights.append(w / np.sqrt(layers[-2]))
 
-        print(self.weights)
+        # print(self.weights)
 
-    def backpropagation(self):
+    def backpropagation(self, output, result):
         pass
 
-    def feed_forward(self):
-        x = self.activation_function(2)
-        print(x)
+    def feed_forward(self, data):
+        tmp = [d for d in data] 
+        # tmp = data     
+        for weight_matrix in self.weights:
+            tmp.append(1) # bias
+            print("in tmp", tmp)
+            print("weight_matrix", weight_matrix)
+            # tmp = np.dot(weight_matrix, tmp)
+            tmp = np.dot(tmp, weight_matrix)
+            tmp = [self.activation_function(x) for x in tmp]
+            print("out tmp", tmp) 
+        return tmp
 
     def train(self, data_set):
         for _ in range(self.epochs):
@@ -54,19 +65,22 @@ class MLP:
             for (X, Y) in data_set:
                 output = self.feed_forward(X)
                 delta_weights = self.backpropagation(output, Y)
-                self.weights += delta_weights
+                # self.weights += delta_weights
 
-    def predict(self):
-        return self.feed_forward()
+    def predict(self, data):
+        return self.feed_forward(data)
 
     def test(self):
         pass
 
 
 if __name__ == "__main__":
-    # perceptron = MLP([2, 2, 1], sigmoid, sigmoid, 1, 1, 1, 1)
-    # perceptron.predict()
+    perceptron = MLP([2, 3, 1], sigmoid, sigmoid, 1, 1, 1, 1)
+    data_set = [[[1,2],1],[[-1,-2],0],[[2,2],1]]
+    perceptron.train(data_set)
+    print("-------")
+    print(perceptron.predict(data_set[0][0]))
 
-    a = [[1,2],[3,4],[5,6]]
-    b = [1,2,3]
-    print(np.dot(b,a))
+    # a = [[1,2],[3,4],[5,6]]
+    # b = [1,2,3]
+    # print(np.dot(b,a))
