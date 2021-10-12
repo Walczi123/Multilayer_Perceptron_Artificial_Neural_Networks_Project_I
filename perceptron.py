@@ -47,9 +47,9 @@ class MLP:
         D = [error * self.sigmoid_deriv(outputs[-1])]
 
         for layer in np.arange(len(outputs) - 2, 0, -1):
-			delta = D[-1].dot(self.W[layer].T)
-			delta = delta * self.sigmoid_deriv(outputs[layer])
-			D.append(delta)
+            delta = D[-1].dot(self.W[layer].T)
+            delta = delta * self.sigmoid_deriv(outputs[layer])
+            D.append(delta)
 
         D = D[::-1]
         for layer in np.arange(0, len(self.W)):
