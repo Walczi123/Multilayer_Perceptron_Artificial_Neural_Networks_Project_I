@@ -4,6 +4,9 @@ import numpy as np
 from activation_functions import sigmoid
 
 
+def f_deriv(x):
+    return sigmoid(x) * (1 - sigmoid(x))
+
 class MLP:
     """
     Neural Network Class
@@ -41,19 +44,7 @@ class MLP:
         self.weights.append(w / np.sqrt(layers[-2]))
 
         # print(self.weights)
-
-    def backpropagation(self, outputs, result):
-        error = outputs[-1] - result
-        D = [error * self.sigmoid_deriv(outputs[-1])]
-
-        for layer in np.arange(len(outputs) - 2, 0, -1):
-			delta = D[-1].dot(self.W[layer].T)
-			delta = delta * self.sigmoid_deriv(outputs[layer])
-			D.append(delta)
-
-        D = D[::-1]
-        for layer in np.arange(0, len(self.W)):
-            self.W[layer] += -self.alpha * outputs[layer].T.dot(D[layer])
+        self.alpha = 0.1
 
     def feed_forward(self, data):
         output=[]
@@ -61,14 +52,27 @@ class MLP:
         # tmp = data     
         for weight_matrix in self.weights:
             tmp.append(1) # bias
-            print("in tmp", tmp)
-            print("weight_matrix", weight_matrix)
+            # print("in tmp", tmp)
+            # print("weight_matrix", weight_matrix)
             # tmp = np.dot(weight_matrix, tmp)
             tmp = np.dot(tmp, weight_matrix)
             tmp = [self.activation_function(x) for x in tmp]
-            print("out tmp", tmp) 
+            # print("out tmp", tmp) 
             output.append(tmp)
         return output
+
+    def backpropagation(self, outputs, result):
+        error = outputs[-1][0] - result
+        D = [error * f_deriv(outputs[-1][0])]
+
+        for layer in np.arange(len(outputs) - 2, 0, -1):
+            delta = D[-1].dot(self.weights[layer].T)
+            delta = delta * f_deriv(outputs[layer])
+            D.append(delta)
+
+        D = D[::-1]
+        for layer in np.arange(0, len(self.weights)):
+            self.weights[layer] += -self.alpha * outputs[layer].T.dot(D[layer])
 
     def train(self, data_set):
         for _ in range(self.epochs):
@@ -87,7 +91,7 @@ class MLP:
 
 
 if __name__ == "__main__":
-    perceptron = MLP([2, 3, 2], sigmoid, sigmoid, 1, 1, 1, 1)
+    perceptron = MLP([2, 3, 1], sigmoid, sigmoid, 1, 1, 1, 1)
     data_set = [[[1,2],1],[[-1,-2],0],[[2,2],1]]
     perceptron.train(data_set)
     print("-------")
