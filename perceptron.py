@@ -44,13 +44,20 @@ class MLP:
             # self.weights.append(w / np.sqrt(layers[i]))
             self.weights.append(w)
         
-        # w = np.random.randn(layers[-2] + 1, layers[-1])
-        w=[]
-        for _ in range(layers[-2] + 1):
-            w.append([1 for _ in range(layers[-1])])
-        print("w", w,"\n")
-        # self.weights.append(w / np.sqrt(layers[-2]))
-        self.weights.append(w)
+        w = np.random.randn(layers[-2] + 1, layers[-1])
+        # print("w", w,"\n")
+        self.weights.append(w / np.sqrt(layers[-2]))
+
+        # print(self.weights)
+
+    def backpropagation(self, outputs, result):
+        error = outputs[-1] - result
+        D = [error * self.sigmoid_deriv(outputs[-1])]
+
+        for layer in np.arange(len(outputs) - 2, 0, -1):
+            delta = D[-1].dot(self.W[layer].T)
+            delta = delta * self.sigmoid_deriv(outputs[layer])
+            D.append(delta)
 
         print("self.weights",self.weights)
         self.alpha = 0.1
