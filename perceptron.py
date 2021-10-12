@@ -1,8 +1,12 @@
 import numpy as np
 # from typing import Callable
 
-from activation_functions import sigmoid
+from activation_functions import sigmoid, simple
 
+
+def f_deriv(x):
+    # return sigmoid(x) * (1 - sigmoid(x))
+    return 1
 
 class MLP:
     """
@@ -32,9 +36,13 @@ class MLP:
         # Init weights
         self.weights = []
         for i in range(len(layers)-2):
-            w = np.random.randn(layers[i] + 1, layers[i + 1])
-            # print("w", w,"\n")
-            self.weights.append(w / np.sqrt(layers[i]))
+            # w = np.random.randn(layers[i] + 1, layers[i + 1])
+            w=[]
+            for _ in range(layers[i] + 1):
+                w.append([1 for _ in range(layers[i + 1])])
+            print("w", w,"\n")
+            # self.weights.append(w / np.sqrt(layers[i]))
+            self.weights.append(w)
         
         w = np.random.randn(layers[-2] + 1, layers[-1])
         # print("w", w,"\n")
@@ -51,9 +59,8 @@ class MLP:
             delta = delta * self.sigmoid_deriv(outputs[layer])
             D.append(delta)
 
-        D = D[::-1]
-        for layer in np.arange(0, len(self.W)):
-            self.W[layer] += -self.alpha * outputs[layer].T.dot(D[layer])
+        print("self.weights",self.weights)
+        self.alpha = 0.1
 
     def feed_forward(self, data):
         output=[]
@@ -69,6 +76,26 @@ class MLP:
             print("out tmp", tmp) 
             output.append(tmp)
         return output
+
+    def backpropagation(self, outputs, result):
+        # print("outputs1", outputs)
+        # outputs = [np.atleast_2d(outputs)]
+        # print("outputs2",outputs)
+        error = [outputs[-1][0] - result]
+        # D = [error * f_deriv(outputs[-1][0])]
+        D = []
+        for i in range(len(error)):
+            D.append(error(i)*f_deriv(outputs[-1][i]))
+
+        print("D",D)
+        for layer in np.arange(len(outputs) - 2, 0, -1):
+            delta = D[-1].dot(self.weights[layer].T)
+            delta = delta * f_deriv(outputs[layer])
+            D.append(delta)
+
+        D = D[::-1]
+        for layer in np.arange(0, len(self.weights)):
+            self.weights[layer] += -self.alpha * outputs[layer].T.dot(D[layer])
 
     def train(self, data_set):
         for _ in range(self.epochs):
@@ -87,11 +114,11 @@ class MLP:
 
 
 if __name__ == "__main__":
-    perceptron = MLP([2, 3, 2], sigmoid, sigmoid, 1, 1, 1, 1)
-    data_set = [[[1,2],1],[[-1,-2],0],[[2,2],1]]
+    perceptron = MLP([2, 3, 1], simple, simple, 1, 1, 1, 1)
+    data_set = np.array([[[1,2],1]]) #,[[-1,-2],0],[[2,2],1]]
     perceptron.train(data_set)
-    print("-------")
-    print(perceptron.predict(data_set[0][0]))
+    # print("-------")
+    # print(perceptron.predict(data_set[0][0]))
 
     # a = [[1,2],[3,4],[5,6]]
     # b = [1,2,3]
