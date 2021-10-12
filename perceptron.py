@@ -42,10 +42,21 @@ class MLP:
 
         # print(self.weights)
 
-    def backpropagation(self, output, result):
-        pass
+    def backpropagation(self, outputs, result):
+        error = outputs[-1] - result
+        D = [error * self.sigmoid_deriv(outputs[-1])]
+
+        for layer in np.arange(len(outputs) - 2, 0, -1):
+			delta = D[-1].dot(self.W[layer].T)
+			delta = delta * self.sigmoid_deriv(outputs[layer])
+			D.append(delta)
+
+        D = D[::-1]
+        for layer in np.arange(0, len(self.W)):
+            self.W[layer] += -self.alpha * outputs[layer].T.dot(D[layer])
 
     def feed_forward(self, data):
+        output=[]
         tmp = [d for d in data] 
         # tmp = data     
         for weight_matrix in self.weights:
@@ -56,7 +67,8 @@ class MLP:
             tmp = np.dot(tmp, weight_matrix)
             tmp = [self.activation_function(x) for x in tmp]
             print("out tmp", tmp) 
-        return tmp
+            output.append(tmp)
+        return output
 
     def train(self, data_set):
         for _ in range(self.epochs):
@@ -68,14 +80,14 @@ class MLP:
                 # self.weights += delta_weights
 
     def predict(self, data):
-        return self.feed_forward(data)
+        return self.feed_forward(data)[-1]
 
     def test(self):
         pass
 
 
 if __name__ == "__main__":
-    perceptron = MLP([2, 3, 1], sigmoid, sigmoid, 1, 1, 1, 1)
+    perceptron = MLP([2, 3, 2], sigmoid, sigmoid, 1, 1, 1, 1)
     data_set = [[[1,2],1],[[-1,-2],0],[[2,2],1]]
     perceptron.train(data_set)
     print("-------")
