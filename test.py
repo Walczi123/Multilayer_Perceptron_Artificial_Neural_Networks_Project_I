@@ -105,8 +105,12 @@ class NeuralNetwork:
             # of the current layer, followed by multiplying the delta
             # by the derivative of the nonlinear activation function
             # for the activations of the current layer
+            print("layer",layer)
+            print("D[-1]",D[-1])
+            print("self.W[layer]",self.W[layer])
             delta = D[-1].dot(self.W[layer].T)
             print("delta1", delta)
+            print("A[layer]",A[layer])
             delta = delta * self.sigmoid_deriv(A[layer])
             print("delta2", delta)
             D.append(delta)

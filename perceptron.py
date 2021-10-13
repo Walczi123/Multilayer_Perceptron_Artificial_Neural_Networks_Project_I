@@ -5,7 +5,7 @@ from activation_functions import sigmoid
 
 
 def f_deriv(x):
-    return sigmoid(x) * (1 - sigmoid(x))
+    return x * (1 - x)
 
 class MLP:
     """
@@ -48,37 +48,58 @@ class MLP:
 
     def feed_forward(self, data):
         output=[]
-        tmp = [d for d in data] 
+        # print("data",data)
+        tmp = data
         # tmp = data     
         for weight_matrix in self.weights:
-            tmp.append(1) # bias
+            # print("tmp1",tmp)
+            # tmp.insert(1) # bias
+            tmp = np.append(tmp, 1) # bias
+            # print("tmp2",tmp)
             # print("in tmp", tmp)
             # print("weight_matrix", weight_matrix)
             # tmp = np.dot(weight_matrix, tmp)
             tmp = np.dot(tmp, weight_matrix)
-            tmp = [self.activation_function(x) for x in tmp]
+            tmp = np.array([self.activation_function(x) for x in tmp])
             # print("out tmp", tmp) 
             output.append(tmp)
         return output
 
     def backpropagation(self, outputs, result):
-        error = outputs[-1][0] - result
-        D = [error * f_deriv(outputs[-1][0])]
+        print("outputs", outputs)
+        print("outputs[-1]", outputs[-1])
+        error = outputs[-1] - result
+        print("error",error)
+        D = [error * f_deriv(outputs[-1])]
+        print("D1",D)
 
-        for layer in np.arange(len(outputs) - 2, 0, -1):
+        for layer in np.arange(len(outputs)-1, 1, -1):
+            print("layer1", layer)
+            print("D[-1]",D[-1])
+            print("self.weights[layer]",self.weights[layer])
             delta = D[-1].dot(self.weights[layer].T)
+            print("delta1", delta)
+            print("outputs[layer]",outputs[layer])
             delta = delta * f_deriv(outputs[layer])
             D.append(delta)
 
         D = D[::-1]
+        print("D2",D)
         for layer in np.arange(0, len(self.weights)):
-            self.weights[layer] += -self.alpha * outputs[layer].T.dot(D[layer])
+            print("layer2", layer)
+            print("outputs["+str(layer)+"]", outputs[layer])
+            print("D["+str(layer)+"]", D[layer])
+            print("weights[["+str(layer)+"]", self.weights[layer])
+            k = outputs[layer].T.dot(D[layer])
+            print("k",k)
+            # print("weights[["+str(layer)+"]", self.weights[layer])
+            self.weights[layer] += -self.alpha * k
 
     def train(self, data_set):
         for _ in range(self.epochs):
             delta_weights = 0
 
-            for (X, Y) in data_set:
+            for X, Y in data_set:
                 output = self.feed_forward(X)
                 delta_weights = self.backpropagation(output, Y)
                 # self.weights += delta_weights
@@ -92,7 +113,7 @@ class MLP:
 
 if __name__ == "__main__":
     perceptron = MLP([2, 3, 1], sigmoid, sigmoid, 1, 1, 1, 1)
-    data_set = [[[1,2],1],[[-1,-2],0],[[2,2],1]]
+    data_set = [[np.array([1,2]),1],[np.array([-1,-2]),0],[np.array([2,2]),1]]
     perceptron.train(data_set)
     print("-------")
     print(perceptron.predict(data_set[0][0]))
