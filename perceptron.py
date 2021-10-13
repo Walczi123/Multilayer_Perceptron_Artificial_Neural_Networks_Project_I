@@ -1,7 +1,7 @@
 import numpy as np
 # from typing import Callable
 
-from activation_functions import sigmoid
+from activation_functions import sigmoid, simple
 
 
 def f_deriv(x):
@@ -35,15 +35,30 @@ class MLP:
         # Init weights
         self.weights = []
         for i in range(len(layers)-2):
-            w = np.random.randn(layers[i] + 1, layers[i + 1])
-            # print("w", w,"\n")
-            self.weights.append(w / np.sqrt(layers[i]))
+            # w = np.random.randn(layers[i] + 1, layers[i + 1])
+            w=[]
+            for _ in range(layers[i] + 1):
+                w.append([1 for _ in range(layers[i + 1])])
+            print("w", w,"\n")
+            # self.weights.append(w / np.sqrt(layers[i]))
+            self.weights.append(w)
         
         w = np.random.randn(layers[-2] + 1, layers[-1])
         # print("w", w,"\n")
         self.weights.append(w / np.sqrt(layers[-2]))
 
         # print(self.weights)
+
+    def backpropagation(self, outputs, result):
+        error = outputs[-1] - result
+        D = [error * self.sigmoid_deriv(outputs[-1])]
+
+        for layer in np.arange(len(outputs) - 2, 0, -1):
+            delta = D[-1].dot(self.W[layer].T)
+            delta = delta * self.sigmoid_deriv(outputs[layer])
+            D.append(delta)
+
+        print("self.weights",self.weights)
         self.alpha = 0.1
 
     def feed_forward(self, data):
@@ -115,8 +130,8 @@ if __name__ == "__main__":
     perceptron = MLP([2, 3, 1], sigmoid, sigmoid, 1, 1, 1, 1)
     data_set = [[np.array([1,2]),1],[np.array([-1,-2]),0],[np.array([2,2]),1]]
     perceptron.train(data_set)
-    print("-------")
-    print(perceptron.predict(data_set[0][0]))
+    # print("-------")
+    # print(perceptron.predict(data_set[0][0]))
 
     # a = [[1,2],[3,4],[5,6]]
     # b = [1,2,3]
