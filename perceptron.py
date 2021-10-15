@@ -110,20 +110,38 @@ class MLP:
             # print("weights[["+str(layer)+"]", self.weights[layer])
             self.weights[layer] += -self.learning_rate  * k
 
-    def train(self, data_set):
-        for _ in range(self.epochs):
-            delta_weights = 0
-
-            for X, Y in data_set:
+    def train(self, dataset, show_percentage = 1):
+        print('----START TRAINING----')
+        showing_param = 0
+        for i in range(self.epochs):
+            for X, Y in dataset:
                 output = self.feed_forward(X)
-                delta_weights = self.backpropagation(output, Y)
-                # self.weights += delta_weights
+                self.backpropagation(output, Y)
+            if i/self.epochs >= showing_param/100:
+                print(f'Training progress status: {showing_param}%')
+                showing_param += show_percentage
+        print(f'Training progress status: {100}%')
+        print('----TRAINING FINISHED----')
 
     def predict(self, data):
         return self.feed_forward(data)[-1]
 
-    def test(self):
-        pass
+    def test(self, dataset, show_percentage = 1):
+        print('----START TEST----')
+        counter = 0
+        showing_param = 0
+        len_dataset = len(dataset)
+        for i in range(len_dataset-1):
+            data, result = dataset[i]
+            prediction = self.predict(data)
+            if i/len_dataset >= showing_param/100:
+                print(f'Test progress status: {showing_param}%')
+                showing_param += show_percentage
+            if prediction == result:
+                counter += 1
+        print(f'Test progress status: {100}%')
+        print('----TEST FINISHED----')
+        print(f'Correct predicted rate: {counter/len_dataset * 100}%')
 
 
 if __name__ == "__main__":
