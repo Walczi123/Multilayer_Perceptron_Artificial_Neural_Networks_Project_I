@@ -62,7 +62,7 @@ class MLP:
         self.alpha = 0.1
 
     def feed_forward(self, data):
-        output=[]
+        output=[np.append(data, 1)]
         # print("data",data)
         tmp = data
         # tmp = data     
@@ -83,24 +83,24 @@ class MLP:
     def backpropagation(self, outputs, result):
         print("outputs", outputs)
         print("outputs[-1]", outputs[-1])
-        error = outputs[-1] - result
+        error = outputs[-2] - result
         print("error",error)
         D = [error * f_deriv(outputs[-1])]
         print("D1",D)
 
-        for layer in np.arange(len(outputs)-1, 1, -1):
+        for layer in np.arange(len(outputs)-3, 1, -1):
             print("layer1", layer)
             print("D[-1]",D[-1])
             print("self.weights[layer]",self.weights[layer])
-            delta = D[-1].dot(self.weights[layer].T)
+            delta = D[-1].dot(np.atleast_2d(self.weights[layer]).T)
             print("delta1", delta)
             print("outputs[layer]",outputs[layer])
-            delta = delta * f_deriv(outputs[layer])
+            delta = delta[:-1] * f_deriv(outputs[layer])
             D.append(delta)
 
         D = D[::-1]
         print("D2",D)
-        for layer in np.arange(0, len(self.weights)):
+        for layer in np.arange(0, len(self.weights)-1):
             print("layer2", layer)
             print("outputs["+str(layer)+"]", outputs[layer])
             print("D["+str(layer)+"]", D[layer])
@@ -108,7 +108,7 @@ class MLP:
             k = outputs[layer].T.dot(D[layer])
             print("k",k)
             # print("weights[["+str(layer)+"]", self.weights[layer])
-            self.weights[layer] += -self.alpha * k
+            self.weights[layer] += -self.learning_rate  * k
 
     def train(self, data_set):
         for _ in range(self.epochs):
@@ -127,11 +127,11 @@ class MLP:
 
 
 if __name__ == "__main__":
-    perceptron = MLP([2, 3, 1], sigmoid, sigmoid, 1, 1, 1, 1)
+    perceptron = MLP([2, 3,1], sigmoid, sigmoid, 1, 0.5, 0.5, 1)
     data_set = [[np.array([1,2]),1],[np.array([-1,-2]),0],[np.array([2,2]),1]]
     perceptron.train(data_set)
-    # print("-------")
-    # print(perceptron.predict(data_set[0][0]))
+    print("-------")
+    print(perceptron.predict(data_set[0][0]))
 
     # a = [[1,2],[3,4],[5,6]]
     # b = [1,2,3]
