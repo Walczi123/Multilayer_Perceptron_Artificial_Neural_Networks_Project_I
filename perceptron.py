@@ -83,7 +83,7 @@ class MLP:
     def backpropagation(self, outputs, result):
         print("outputs", outputs)
         print("outputs[-1]", outputs[-1])
-        error = outputs[-2] - result
+        error = outputs[-1] - result #czemu -2? a nie -1? 
         print("error",error)
         D = [error * f_deriv(outputs[-1])]
         print("D1",D)
@@ -100,7 +100,7 @@ class MLP:
 
         D = D[::-1]
         print("D2",D)
-        for layer in np.arange(0, len(self.weights)-1):
+        for layer in np.arange(0, len(self.weights)):
             print("layer2", layer)
             print("outputs["+str(layer)+"]", outputs[layer])
             print("D["+str(layer)+"]", D[layer])
@@ -127,7 +127,7 @@ class MLP:
 
 
 if __name__ == "__main__":
-    perceptron = MLP([2, 3,1], sigmoid, sigmoid, 1, 0.5, 0.5, 1)
+    perceptron = MLP([2, 3, 1], sigmoid, sigmoid, 1, 0.5, 0.5, 1)
     data_set = [[np.array([1,2]),1],[np.array([-1,-2]),0],[np.array([2,2]),1]]
     perceptron.train(data_set)
     print("-------")
