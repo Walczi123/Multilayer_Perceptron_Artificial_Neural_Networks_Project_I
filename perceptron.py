@@ -87,8 +87,9 @@ class MLP:
         print("error",error)
         D = [error * f_deriv(outputs[-1])]
         print("D1",D)
+        print("OUTPUTS", outputs)
 
-        for layer in np.arange(len(outputs)-1, 1, -1):
+        for layer in np.arange(len(outputs)-1, 0, -1):
             print("layer1", layer)
             print("D[-1]",D[-1])
             print("self.weights[layer]",self.weights[layer])
