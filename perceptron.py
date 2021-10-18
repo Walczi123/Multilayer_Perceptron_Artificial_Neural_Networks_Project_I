@@ -1,18 +1,10 @@
 import numpy as np
-# from typing import Callable
-
-from activation_functions import sigmoid, simple
-
-
-def f_deriv(x):
-    return x * (1 - x)
+from common.functions import function_type
 
 class MLP:
     """
     Neural Network Class
     """
-
-    # def __init__(self, layers:list, activation_function: Callable, transfer_function: Callable, epochs: int, learning_rate: float, learning_coefficient: float, seed: int):
     def __init__(self, layers, activation_function, transfer_function, epochs, learning_rate, learning_coefficient, seed):
 
         """
@@ -25,6 +17,7 @@ class MLP:
             learning_coefficient (float): learning coefficient
             seed (int): number used as a seed for random number generator
         """
+        np.random.seed(seed)
         self.layers = layers
         self.activation_function = activation_function
         self.transfer_function = transfer_function
@@ -32,91 +25,54 @@ class MLP:
         self.learning_rate = learning_rate
         self.learning_coefficient = learning_coefficient
 
-        # Init weights
         self.weights = []
-        for i in range(len(layers)-2):
-            # w = np.random.randn(layers[i] + 1, layers[i + 1])
-            w=[]
-            for _ in range(layers[i] + 1):
-                w.append([1 for _ in range(layers[i + 1])])
-            print("w", w,"\n")
-            # self.weights.append(w / np.sqrt(layers[i]))
-            self.weights.append(w)
-        
-        w = np.random.randn(layers[-2] + 1, layers[-1])
-        # print("w", w,"\n")
-        self.weights.append(w / np.sqrt(layers[-2]))
-
-        # print(self.weights)
-
-    def backpropagation(self, outputs, result):
-        error = outputs[-1] - result
-        D = [error * self.sigmoid_deriv(outputs[-1])]
-
-        for layer in np.arange(len(outputs) - 2, 0, -1):
-            delta = D[-1].dot(self.W[layer].T)
-            delta = delta * self.sigmoid_deriv(outputs[layer])
-            D.append(delta)
-
-        print("self.weights",self.weights)
-        self.alpha = 0.1
+        self.biases = []
+        for i in range(len(layers)-1):
+            if True:
+                self.biases.append(np.random.randn(layers[i + 1]))
+            w = np.random.randn(layers[i], layers[i + 1])
+            self.weights.append(w / np.sqrt(layers[i]))
 
     def feed_forward(self, data):
-        output=[np.append(data, 1)]
-        # print("data",data)
+        output=[data]
+        z = [data]
         tmp = data
-        # tmp = data     
-        for weight_matrix in self.weights:
-            # print("tmp1",tmp)
-            # tmp.insert(1) # bias
-            tmp = np.append(tmp, 1) # bias
-            # print("tmp2",tmp)
-            # print("in tmp", tmp)
-            # print("weight_matrix", weight_matrix)
-            # tmp = np.dot(weight_matrix, tmp)
-            tmp = np.dot(tmp, weight_matrix)
+
+        for i in range(len(self.weights)):
+            tmp = np.dot(tmp, self.weights[i])
+            if True:               
+                tmp += self.biases[i]
+            z.append(np.array(tmp))
             tmp = np.array([self.activation_function(x) for x in tmp])
-            # print("out tmp", tmp) 
             output.append(tmp)
-        return output
+        return output, z
 
-    def backpropagation(self, outputs, result):
-        print("outputs", outputs)
-        print("outputs[-1]", outputs[-1])
-        error = outputs[-1] - result #czemu -2? a nie -1? 
-        print("error",error)
-        D = [error * f_deriv(outputs[-1])]
-        print("D1",D)
+    def backpropagation(self, outputs, z, result, data):
+        error = outputs[-1] - np.atleast_2d(result)
+        D_weights = [np.dot(error.T, [outputs[-2]])]
+        D_biases = [error]
+        tmp = error
+        for layer in range(len(self.weights) - 2, -1, -1): # PYTANIE: wzór ? dobry?
+            tmp = np.dot(tmp, self.weights[layer+1].T)
+            tmp = np.multiply(tmp,self.activation_function.derivative(z[layer+1]))
+            D_biases.append(tmp)
+            tmp1 = np.dot(tmp.T, np.atleast_2d(outputs[layer]))
+            D_weights.append(tmp1)
 
-        for layer in np.arange(len(outputs)-3, 1, -1):
-            print("layer1", layer)
-            print("D[-1]",D[-1])
-            print("self.weights[layer]",self.weights[layer])
-            delta = D[-1].dot(np.atleast_2d(self.weights[layer]).T)
-            print("delta1", delta)
-            print("outputs[layer]",outputs[layer])
-            delta = delta[:-1] * f_deriv(outputs[layer])
-            D.append(delta)
+        D_weights = D_weights[::-1]
+        D_biases = D_biases[::-1]
 
-        D = D[::-1]
-        print("D2",D)
-        for layer in np.arange(0, len(self.weights)):
-            print("layer2", layer)
-            print("outputs["+str(layer)+"]", outputs[layer])
-            print("D["+str(layer)+"]", D[layer])
-            print("weights[["+str(layer)+"]", self.weights[layer])
-            k = outputs[layer].T.dot(D[layer])
-            print("k",k)
-            # print("weights[["+str(layer)+"]", self.weights[layer])
-            self.weights[layer] += -self.learning_rate  * k
+        for i in range(len(self.weights)): # PYTANIE: UPDATE wag przy propagacji wstecznej czy po przejściu przez wyszystkie wagi?
+            self.weights[i] += -self.learning_rate * D_weights[i][0].T
+            self.biases[i] += -self.learning_rate * D_biases[i][0]
 
     def train(self, dataset, show_percentage = 1):
         print('----START TRAINING----')
         showing_param = 0
         for i in range(self.epochs):
             for X, Y in dataset:
-                output = self.feed_forward(X)
-                self.backpropagation(output, Y)
+                output, z = self.feed_forward(X)
+                self.backpropagation(output, z, Y, X)
             if i/self.epochs >= showing_param/100:
                 print(f'Training progress status: {showing_param}%')
                 showing_param += show_percentage
@@ -124,7 +80,7 @@ class MLP:
         print('----TRAINING FINISHED----')
 
     def predict(self, data):
-        return self.feed_forward(data)[-1]
+        return self.feed_forward(data)[0][-1]
 
     def test(self, dataset, show_percentage = 1):
         print('----START TEST----')
@@ -145,12 +101,8 @@ class MLP:
 
 
 if __name__ == "__main__":
-    perceptron = MLP([2, 3, 1], sigmoid, sigmoid, 1, 0.5, 0.5, 1)
+    perceptron = MLP([2, 3,5,1], function_type.Sigmoid, function_type.Softmax, 1, 0.5, 0.5, 1)
     data_set = [[np.array([1,2]),1],[np.array([-1,-2]),0],[np.array([2,2]),1]]
     perceptron.train(data_set)
     print("-------")
     print(perceptron.predict(data_set[0][0]))
-
-    # a = [[1,2],[3,4],[5,6]]
-    # b = [1,2,3]
-    # print(np.dot(b,a))

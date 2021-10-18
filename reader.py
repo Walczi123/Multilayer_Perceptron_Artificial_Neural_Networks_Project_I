@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from common.problem_type import problem_type
 
@@ -13,9 +14,12 @@ def prepare_data(p_type: problem_type, filename: str):
         data = read_file(filename)
 
         if p_type == problem_type.Regression:
-            return data
+            return np.array(data)
         elif p_type == problem_type.Classification:
-            return [[[row[0], row[1]], row[2]] for row in data]
+            dataset = []
+            for row in data:
+                dataset.append([np.array([row[0], row[1]]), row[2]])
+            return dataset
     except:
         raise
     
@@ -24,8 +28,8 @@ def prepare_data(p_type: problem_type, filename: str):
 
 if __name__ == "__main__":
     try:
-        # result = prepare_data(problem_type.Regression,  "data/regression/data.activation.test.100.csv")
-        result = prepare_data(problem_type.Classification,  "data/classification/data.simple.test.100.csv")
+        result = prepare_data(problem_type.Regression,  "data/regression/data.activation.test.100.csv")
+        # result = prepare_data(problem_type.Classification,  "data/classification/data.simple.test.100.csv")
     except Exception as e:
         print(e)
         exit()
