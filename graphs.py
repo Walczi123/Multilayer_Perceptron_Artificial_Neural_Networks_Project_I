@@ -1,4 +1,3 @@
-from matplotlib import plot
 import numpy as np
 from sklearn.datasets import make_blobs
 from sklearn.linear_model import LogisticRegression
@@ -16,9 +15,9 @@ def generate_classification_graph_of_points(dataset):
     unique = np.unique(y)
     for class_value in range(len(unique)):
         row_ix = np.where(y == class_value)
-        plot.scatter(X[row_ix, 0], X[row_ix, 1])
+        pyplot.scatter(X[row_ix, 0], X[row_ix, 1])
 
-    plot.show()
+    pyplot.show()
 
 def generate(dataset):
     X = np.array([data[0] for data in dataset])
@@ -60,5 +59,5 @@ def generate_regression_graph(path_to_train_dataset, path_to_test_dataset):
 
 if __name__ == "__main__":
     dataset = prepare_data(problem_type.Classification, "data/classification/data.simple.test.100.csv")
-    generate(dataset)
+    generate_classification_graph_of_points(dataset)
 
