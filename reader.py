@@ -28,8 +28,8 @@ def prepare_data(p_type: problem_type, filename: str):
 
 if __name__ == "__main__":
     try:
-        # result = prepare_data(problem_type.Regression,  "data/regression/data.activation.test.100.csv")
-        result = prepare_data(problem_type.Classification,  "data/classification/data.simple.test.100.csv")
+        result = prepare_data(problem_type.Regression,  "data/regression/data.activation.test.100.csv")
+        # result = prepare_data(problem_type.Classification,  "data/classification/data.simple.test.100.csv")
     except Exception as e:
         print(e)
         exit()
