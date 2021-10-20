@@ -1,5 +1,5 @@
 import numpy as np
-from common.functions import function_type
+from common.functions import function_type, cross_entropy
 
 
 class MLP:
@@ -18,7 +18,7 @@ class MLP:
             learning_coefficient (float): learning coefficient
             seed (int): number used as a seed for random number generator
         """
-        np.random.seed(seed)
+        # np.random.seed(seed)
         self.layers = layers
         self.activation_function = activation_function
         self.transfer_function = transfer_function
@@ -32,11 +32,11 @@ class MLP:
         for i in range(len(layers)-1):
             if self.bias:
                 b = np.random.randn(layers[i + 1])
-                self.biases.append((b / np.sqrt(layers[i + 1])).round(1))
+                self.biases.append(b / np.sqrt(layers[i + 1]))
                 # self.biases.append([1 for _ in range(layers[i + 1])])
             w = np.random.randn(layers[i], layers[i + 1])
             # w = [[1 for _ in range(layers[i + 1])] for _ in range(layers[i])]
-            self.weights.append((w / np.sqrt(layers[i])).round(1))
+            self.weights.append(w / np.sqrt(layers[i]))
             # self.weights.append(np.array(w))
             # self.delta_weights = [np.zeros((layer_s[i], layer_s[i+1])) for i in range(len(layer_s)-1)
         # ]
@@ -68,7 +68,7 @@ class MLP:
             tmp = np.multiply(
                 tmp, self.activation_function.derivative(z[layer+1]))
             D_biases.append(tmp[0])
-            tmp1 = np.multiply(tmp, np.atleast_2d(outputs[layer]).T)    
+            tmp1 = np.multiply(tmp, np.atleast_2d(outputs[layer]).T)
             D_weights.append(tmp1)
 
         # D_weights = D_weights[::-1]
@@ -106,22 +106,23 @@ class MLP:
         print('----START TEST----')
         counter = 0
         showing_param = 0
-        non_zero = 0
         len_dataset = len(dataset)
+        targets = []
+        predictions = []
         for i in range(len_dataset-1):
             data, result = dataset[i]
             prediction = self.predict(data)
+            targets.append(result)
+            predictions.append(prediction)
             if i/len_dataset >= showing_param/100:
                 print(f'Test progress status: {showing_param}%')
                 showing_param += show_percentage
             if prediction == result:
                 counter += 1
-            if prediction != 0:
-                non_zero = non_zero + 1
         print(f'Test progress status: {100}%')
         print('----TEST FINISHED----')
         print(f'Correct predicted rate: {counter/len_dataset * 100}%')
-        print("Non zero: ", str(non_zero))
+        print(f'Cross entropy : {cross_entropy(targets, predictions)}')
 
 
 if __name__ == "__main__":
