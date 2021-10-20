@@ -32,14 +32,16 @@ class MLP:
         for i in range(len(layers)-1):
             if self.bias:
                 b = np.random.randn(layers[i + 1])
-                self.biases.append(b / np.sqrt(layers[i + 1]))
+                self.biases.append((b / np.sqrt(layers[i + 1])).round(1))
                 # self.biases.append([1 for _ in range(layers[i + 1])])
             w = np.random.randn(layers[i], layers[i + 1])
             # w = [[1 for _ in range(layers[i + 1])] for _ in range(layers[i])]
-            self.weights.append(w / np.sqrt(layers[i]))
+            self.weights.append((w / np.sqrt(layers[i])).round(1))
             # self.weights.append(np.array(w))
             # self.delta_weights = [np.zeros((layer_s[i], layer_s[i+1])) for i in range(len(layer_s)-1)
         # ]
+        # self.biases = np.atleast_2d(self.biases)
+        # self.weights = np.atleast_2d(self.weights)
 
     def feed_forward(self, data):
         output = [data]
@@ -57,15 +59,16 @@ class MLP:
 
     def backpropagation(self, outputs, z, result, data):
         error = outputs[-1] - np.array(result)
-        D_weights = [np.multiply(error, [outputs[-2].T])]
+        D_weights = [np.multiply(np.atleast_2d(
+            error), np.atleast_2d(outputs[-2]).T)]
         D_biases = [error]
         tmp = error
-        for layer in range(len(self.weights) - 2, -1, -1):  # PYTANIE: wzór ? dobry?
-            tmp = np.multiply(tmp, self.weights[layer+1].T)
+        for layer in range(len(self.weights) - 2, -1, -1):
+            tmp = np.dot(tmp, self.weights[layer+1].T)
             tmp = np.multiply(
                 tmp, self.activation_function.derivative(z[layer+1]))
             D_biases.append(tmp[0])
-            tmp1 = np.multiply(tmp, outputs[layer].T)
+            tmp1 = np.multiply(tmp, np.atleast_2d(outputs[layer]).T)    
             D_weights.append(tmp1)
 
         # D_weights = D_weights[::-1]
@@ -122,7 +125,7 @@ class MLP:
 
 
 if __name__ == "__main__":
-    perceptron = MLP([1, 3, 1], function_type.Simple,
+    perceptron = MLP([1, 3, 2, 10, 8, 1231, 513, 123, 1], function_type.Simple,
                      function_type.Simple, 1, 0.5, 0.5, 0, True)
     # data_set = [[np.array([1,2]),1],[np.array([-1,-2]),0],[np.array([2,2]),1]]
     data_set = [[np.array([1]), 1]]
