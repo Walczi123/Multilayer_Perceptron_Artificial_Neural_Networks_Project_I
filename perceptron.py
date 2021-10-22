@@ -1,5 +1,5 @@
 import numpy as np
-from common.functions import function_type
+from common.functions import function_type, cross_entropy
 
 
 class MLP:
@@ -18,7 +18,7 @@ class MLP:
             learning_coefficient (float): learning coefficient
             seed (int): number used as a seed for random number generator
         """
-        np.random.seed(seed)
+        # np.random.seed(seed)
         self.layers = layers
         self.activation_function = activation_function
         self.transfer_function = transfer_function
@@ -40,6 +40,8 @@ class MLP:
             # self.weights.append(np.array(w))
             # self.delta_weights = [np.zeros((layer_s[i], layer_s[i+1])) for i in range(len(layer_s)-1)
         # ]
+        # self.biases = np.atleast_2d(self.biases)
+        # self.weights = np.atleast_2d(self.weights)
 
     def feed_forward(self, data):
         output = [data]
@@ -57,15 +59,16 @@ class MLP:
 
     def backpropagation(self, outputs, z, result, data):
         error = outputs[-1] - np.array(result)
-        D_weights = [np.multiply(error, [outputs[-2].T])]
+        D_weights = [np.multiply(np.atleast_2d(
+            error), np.atleast_2d(outputs[-2]).T)]
         D_biases = [error]
         tmp = error
-        for layer in range(len(self.weights) - 2, -1, -1):  # PYTANIE: wzór ? dobry?
-            tmp = np.multiply(tmp, self.weights[layer+1].T)
+        for layer in range(len(self.weights) - 2, -1, -1):
+            tmp = np.dot(tmp, self.weights[layer+1].T)
             tmp = np.multiply(
                 tmp, self.activation_function.derivative(z[layer+1]))
             D_biases.append(tmp[0])
-            tmp1 = np.multiply(tmp, outputs[layer].T)
+            tmp1 = np.multiply(tmp, np.atleast_2d(outputs[layer]).T)
             D_weights.append(tmp1)
 
         # D_weights = D_weights[::-1]
@@ -103,26 +106,27 @@ class MLP:
         print('----START TEST----')
         counter = 0
         showing_param = 0
-        non_zero = 0
         len_dataset = len(dataset)
+        targets = []
+        predictions = []
         for i in range(len_dataset-1):
             data, result = dataset[i]
             prediction = self.predict(data)
+            targets.append(result)
+            predictions.append(prediction)
             if i/len_dataset >= showing_param/100:
                 print(f'Test progress status: {showing_param}%')
                 showing_param += show_percentage
             if prediction == result:
                 counter += 1
-            if prediction != 0:
-                non_zero = non_zero + 1
         print(f'Test progress status: {100}%')
         print('----TEST FINISHED----')
         print(f'Correct predicted rate: {counter/len_dataset * 100}%')
-        print("Non zero: ", str(non_zero))
+        print(f'Cross entropy : {cross_entropy(targets, predictions)}')
 
 
 if __name__ == "__main__":
-    perceptron = MLP([1, 3, 1], function_type.Simple,
+    perceptron = MLP([1, 3, 2, 10, 8, 1231, 513, 123, 1], function_type.Simple,
                      function_type.Simple, 1, 0.5, 0.5, 0, True)
     # data_set = [[np.array([1,2]),1],[np.array([-1,-2]),0],[np.array([2,2]),1]]
     data_set = [[np.array([1]), 1]]
