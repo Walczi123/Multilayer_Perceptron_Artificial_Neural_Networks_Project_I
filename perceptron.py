@@ -121,8 +121,11 @@ class MLP:
                 counter += 1
         print(f'Test progress status: {100}%')
         print('----TEST FINISHED----')
-        print(f'Correct predicted rate: {counter/len_dataset * 100}%')
-        print(f'Cross entropy : {cross_entropy(targets, predictions)}')
+        prediction_rate = counter/len_dataset * 100
+        loss = cross_entropy(targets, predictions)
+        print(f'Correct predicted rate: {prediction_rate}%')
+        print(f'Cross entropy : {loss}')
+        return prediction_rate, loss
 
 
 if __name__ == "__main__":
