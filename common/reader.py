@@ -15,19 +15,23 @@ def read_file(filename: str, ):
         raise FileNotFoundError('Could not find the file')
 
 
-def prepare_data(p_type: problem_type, filename: str):
+def prepare_data(p_type: problem_type, filename: str, with_filename = False):
     try:
         data = normalize_data(read_file(filename))
         if p_type == problem_type.Regression:
             dataset = []
             for row in data:
                 dataset.append([np.array([row[0]]), row[1]])
-            return dataset
+            if not with_filename:
+                return dataset
+            return (dataset, filename)
         elif p_type == problem_type.Classification:
             dataset = []
             for row in data:
                 dataset.append([np.array([row[0], row[1]]), row[2]])
-            return dataset
+            if not with_filename:
+                return dataset
+            return (dataset, filename)
     except:
         raise
 
