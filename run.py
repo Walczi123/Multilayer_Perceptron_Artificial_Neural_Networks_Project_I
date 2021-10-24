@@ -75,15 +75,4 @@ if __name__ == "__main__":
     # pyplot.scatter(x, predictions123[3], c="green")
     # pyplot.scatter(x, predictions123[4], c="brown")
 
-<<<<<<< HEAD
-    pyplot.show()
-=======
-    xt = []
-    yt = []
-    for i in range(len(train_dataset)):
-        xt.append(test_dataset[i][0])
-        yt.append(test_dataset[i][1])
 
-    generate_regression_graph((x, y), (x, predictions), (xt, yt))
-    # generate_classification_graph_of_points(predictions)
->>>>>>> c6048c27a9e149456a1de1ff82d83899367554c8
