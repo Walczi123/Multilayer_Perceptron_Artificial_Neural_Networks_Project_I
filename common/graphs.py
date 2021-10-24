@@ -5,8 +5,9 @@ from matplotlib import pyplot
 # from common.problem_type import problem_type
 # from common.reader import prepare_data
 
-first_colors = ['darkred','darkgreen','darkblue']
-second_colors = ['indianred','forestgreen','royalblue']
+first_colors = ['darkred', 'darkgreen', 'darkblue']
+second_colors = ['indianred', 'forestgreen', 'royalblue']
+
 
 def generate_classification_graph_of_points(dataset):
     X = np.array([data[0] for data in dataset])
@@ -18,6 +19,7 @@ def generate_classification_graph_of_points(dataset):
         pyplot.scatter(X[row_ix, 0], X[row_ix, 1])
 
     pyplot.show()
+
 
 def generate(dataset):
     X = np.array([data[0] for data in dataset])
@@ -34,7 +36,7 @@ def generate(dataset):
     r1, r2 = xx.flatten(), yy.flatten()
     r1, r2 = r1.reshape((len(r1), 1)), r2.reshape((len(r2), 1))
     # horizontal stack vectors to create x1,x2 input for the model
-    grid = np.hstack((r1,r2))
+    grid = np.hstack((r1, r2))
     # define the model
     model = LogisticRegression()
     # fit the model
@@ -50,12 +52,14 @@ def generate(dataset):
     for class_value in range(len(unique)):
         row_ix = np.where(y == class_value)
         pyplot.scatter(X[row_ix, 0], X[row_ix, 1], cmap='Paired')
-    
+
     pyplot.show()
 
-def generate_regression_graph(targets, predictions):
+
+def generate_regression_graph(targets, predictions, train):
     pyplot.scatter(targets[0], targets[1], c="black")
     pyplot.scatter(predictions[0], predictions[1], c="red")
+    pyplot.scatter(train[0], train[1], c="green")
     pyplot.show()
 
 
@@ -63,4 +67,3 @@ if __name__ == "__main__":
     # dataset = prepare_data(problem_type.Classification, "data/classification/data.simple.test.100.csv")
     # generate_classification_graph_of_points(dataset)
     generate_regression_graph()
-
