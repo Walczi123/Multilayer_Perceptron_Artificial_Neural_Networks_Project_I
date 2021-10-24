@@ -53,7 +53,10 @@ class MLP:
             if self.bias:
                 tmp += self.biases[i]
             z.append(np.array(tmp))
-            tmp = np.array([self.activation_function(x) for x in tmp])
+            if i < (len(self.weights) - 1):
+                tmp = np.array([self.activation_function(x) for x in tmp])
+            else:
+                tmp = np.array([self.transfer_function(x) for x in tmp])
             output.append(tmp)
         return output, z
 
@@ -89,6 +92,7 @@ class MLP:
     def train(self, dataset, show_percentage=1):
         print('----START TRAINING----')
         showing_param = 0
+        np.random.shuffle(dataset)
         for i in range(self.epochs):
             for X, Y in dataset:
                 output, z = self.feed_forward(X)
@@ -109,7 +113,7 @@ class MLP:
         len_dataset = len(dataset)
         targets = []
         predictions = []
-        for i in range(len_dataset): # tu był błąd, było -1 a nie powinno byc
+        for i in range(len_dataset):  # tu był błąd, było -1 a nie powinno byc
             data, result = dataset[i]
             prediction = self.predict(data)
             targets.append(result)
