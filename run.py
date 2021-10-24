@@ -4,6 +4,7 @@ from common.problem_type import problem_type
 from common.reader import prepare_data
 from common.graphs import generate_regression_graph, generate_classification_graph_of_points
 import numpy as np
+from matplotlib import pyplot
 
 # Parameters
 
@@ -48,20 +49,30 @@ if __name__ == "__main__":
 
     # test_dataset = train_dataset
 
-    perceptron.train(train_dataset, SHOW_PERCENTAGE)
-    _, _, predictions = perceptron.test(test_dataset, SHOW_PERCENTAGE)
-
     x = []
     y = []
-    for i in range(len(test_dataset)):
-        x.append(test_dataset[i][0])
-        y.append(test_dataset[i][1])
-
-    xt = []
-    yt = []
     for i in range(len(train_dataset)):
-        xt.append(test_dataset[i][0])
-        yt.append(test_dataset[i][1])
+        x.append(train_dataset[i][0])
+        y.append(train_dataset[i][1])
 
-    generate_regression_graph((x, y), (x, predictions), (xt, yt))
-    # generate_classification_graph_of_points(predictions)
+    predictions123 = []
+    for _ in range(20):
+        perceptron.train(train_dataset, SHOW_PERCENTAGE)
+        _, _, predictions = perceptron.test(train_dataset, SHOW_PERCENTAGE)
+        predictions123.append(np.concatenate(predictions))
+
+        # generate_regression_graph((x, y), (x, predictions))
+        # generate_classification_graph_of_points(predictions)
+    pyplot.scatter(x, y, c="black")
+    color = "blue"
+    for i in range(20):
+        pyplot.scatter(x, predictions123[i], c=color)
+        if i == 7: color = "red"
+        if i == 15: color = "yellow"
+    # pyplot.scatter(x, predictions123[0], c="red")
+    # pyplot.scatter(x, predictions123[1], c="blue")
+    # pyplot.scatter(x, predictions123[2], c="yellow")
+    # pyplot.scatter(x, predictions123[3], c="green")
+    # pyplot.scatter(x, predictions123[4], c="brown")
+
+

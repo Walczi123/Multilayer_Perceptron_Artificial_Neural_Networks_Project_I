@@ -85,7 +85,7 @@ class MLP:
         # PYTANIE: UPDATE wag przy propagacji wstecznej czy po przejściu przez wyszystkie wagi?
         for i in range(len(self.weights)-1, -1, -1):
             tmp_i = len(self.weights) - i - 1
-            self.weights[tmp_i] -= self.learning_rate * D_weights[i]
+            self.weights[tmp_i] = self.learning_rate * D_weights[i]
             if self.bias:
                 self.biases[tmp_i] -= self.learning_rate * D_biases[i]
 
@@ -126,7 +126,7 @@ class MLP:
         print(f'Test progress status: {100}%')
         print('----TEST FINISHED----')
         prediction_rate = counter/len_dataset * 100
-        loss = mse(targets, predictions)
+        loss = mse(predictions, targets)
         print(f'Correct predicted rate: {prediction_rate}%')
         print(f'Loss function : {loss}')
         return prediction_rate, loss, predictions
