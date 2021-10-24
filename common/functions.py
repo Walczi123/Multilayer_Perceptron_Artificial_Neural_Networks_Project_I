@@ -65,3 +65,11 @@ def cross_entropy(predictions, targets, epsilon=1e-12):
     # ce = -np.sum(targets*np.log(predictions+1e-9))/N
     ce = -np.sum(targets*np.log(predictions))/N
     return ce
+
+def mse(predicteds, targets):
+    predicteds = np.array(predicteds)
+    targets = np.concatenate(targets)
+    diff = targets - predicteds #diff = [1, 2, 2]
+    square = np.square(diff) # square = [1, 4, 4]
+    summation = sum(square) # summation = 9
+    return summation / len(targets) #3 

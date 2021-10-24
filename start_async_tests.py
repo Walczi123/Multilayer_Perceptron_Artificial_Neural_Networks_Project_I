@@ -13,11 +13,11 @@ REPETITIONS = 50
 def generate_instances():
     result = []
     
-    mpl = MLP([1,2,1], function_type.Sigmoid, function_type.Sigmoid, 2, 0.1, 0.1, SEED, True)
+    mpl = MLP([1,2,1], function_type.Sigmoid, function_type.Sigmoid, 1, 0.1, 0.1, SEED, True)
     train_dataset = prepare_data(problem_type.Regression, "data/regression/data.cube.train.100.csv", True)
     test_dataset = prepare_data(problem_type.Regression, "data/regression/data.cube.test.100.csv", True)
     result.append(Test(mpl, train_dataset, test_dataset, n_repetition=REPETITIONS,
-                       name="mpl121", seed=SEED,))
+                       name="mpl121", seed=SEED))
 
     return result
 
@@ -32,12 +32,12 @@ def run_tests():
     # print("iterable", iterable)
     start_time = time.time()
 
-    p = multiprocessing.Pool()
-    p.map_async(run_test, iterable)
+    # p = multiprocessing.Pool()
+    # p.map_async(run_test, iterable)
 
-    p.close()
-    p.join()
-    # iterable[0].start()
+    # p.close()
+    # p.join()
+    iterable[0].start()
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
