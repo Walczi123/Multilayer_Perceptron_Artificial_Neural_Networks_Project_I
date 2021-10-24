@@ -5,7 +5,7 @@ from common.problem_type import problem_type
 
 def normalize_data(dataset):
     norm = np.linalg.norm(dataset)
-    return dataset/norm
+    return [[elem[0], elem[1]/norm] for elem in dataset]
 
 
 def read_file(filename: str, ):
@@ -15,16 +15,16 @@ def read_file(filename: str, ):
         raise FileNotFoundError('Could not find the file')
 
 
-def prepare_data(p_type: problem_type, filename: str, with_filename = False):
+def prepare_data(p_type: problem_type, filename: str, with_filename=False):
     try:
-        data = normalize_data(read_file(filename))
+        data = read_file(filename)
         if p_type == problem_type.Regression:
             dataset = []
             for row in data:
                 dataset.append([np.array([row[0]]), row[1]])
             if not with_filename:
-                return dataset
-            return (dataset, filename)
+                return normalize_data(dataset)
+            return (normalize_data(dataset), filename)
         elif p_type == problem_type.Classification:
             dataset = []
             for row in data:
