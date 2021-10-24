@@ -1,5 +1,5 @@
 import numpy as np
-from common.functions import function_type, cross_entropy
+from common.functions import function_type, cross_entropy, mse
 
 
 class MLP:
@@ -122,9 +122,9 @@ class MLP:
         print(f'Test progress status: {100}%')
         print('----TEST FINISHED----')
         prediction_rate = counter/len_dataset * 100
-        loss = cross_entropy(targets, predictions)
+        loss = mse(targets, predictions)
         print(f'Correct predicted rate: {prediction_rate}%')
-        print(f'Cross entropy : {loss}')
+        print(f'Loss function : {loss}')
         return prediction_rate, loss, predictions
 
 
