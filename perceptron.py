@@ -109,7 +109,7 @@ class MLP:
         len_dataset = len(dataset)
         targets = []
         predictions = []
-        for i in range(len_dataset-1):
+        for i in range(len_dataset): # tu był błąd, było -1 a nie powinno byc
             data, result = dataset[i]
             prediction = self.predict(data)
             targets.append(result)
@@ -125,7 +125,7 @@ class MLP:
         loss = cross_entropy(targets, predictions)
         print(f'Correct predicted rate: {prediction_rate}%')
         print(f'Cross entropy : {loss}')
-        return prediction_rate, loss
+        return prediction_rate, loss, predictions
 
 
 if __name__ == "__main__":
