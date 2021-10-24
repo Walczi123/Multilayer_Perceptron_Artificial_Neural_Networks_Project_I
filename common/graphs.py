@@ -56,10 +56,9 @@ def generate(dataset):
     pyplot.show()
 
 
-def generate_regression_graph(targets, predictions, train):
+def generate_regression_graph(targets, predictions):
     pyplot.scatter(targets[0], targets[1], c="black")
     pyplot.scatter(predictions[0], predictions[1], c="red")
-    pyplot.scatter(train[0], train[1], c="green")
     pyplot.show()
 
 
