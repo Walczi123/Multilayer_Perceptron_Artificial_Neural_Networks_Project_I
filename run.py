@@ -15,11 +15,11 @@ PATH_TO_TEST_DATASET = "data/regression/data.cube.test.100.csv"
 
 
 LAYERS = [1, 3, 1]
-ACTIVATION_FUNCTION = function_type.Sigmoid
-TRANSFER_FUNCTION = function_type.Sigmoid
-EPOCHS = 100
-LEARINN_RATE = 0.01
-LEARINN_COEFFICIENT = 0.01
+ACTIVATION_FUNCTION = function_type.Tanh
+TRANSFER_FUNCTION = function_type.Simple
+EPOCHS = 1000
+LEARINN_RATE = 0.1
+LEARINN_COEFFICIENT = 0.1
 SEED = 141
 SHOW_PERCENTAGE = 1
 BIAS = True
@@ -57,5 +57,11 @@ if __name__ == "__main__":
         x.append(test_dataset[i][0])
         y.append(test_dataset[i][1])
 
-    generate_regression_graph((x, y), (x, predictions))
+    xt = []
+    yt = []
+    for i in range(len(train_dataset)):
+        xt.append(test_dataset[i][0])
+        yt.append(test_dataset[i][1])
+
+    generate_regression_graph((x, y), (x, predictions), (xt, yt))
     # generate_classification_graph_of_points(predictions)
