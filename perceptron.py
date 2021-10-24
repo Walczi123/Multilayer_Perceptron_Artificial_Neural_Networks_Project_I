@@ -18,7 +18,7 @@ class MLP:
             learning_coefficient (float): learning coefficient
             seed (int): number used as a seed for random number generator
         """
-        # np.random.seed(seed)
+        np.random.seed(seed)
         self.layers = layers
         self.activation_function = activation_function
         self.transfer_function = transfer_function
