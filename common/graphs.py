@@ -2,8 +2,8 @@ import numpy as np
 from sklearn.datasets import make_blobs
 from sklearn.linear_model import LogisticRegression
 from matplotlib import pyplot
-from common.problem_type import problem_type
-from reader import prepare_data
+# from common.problem_type import problem_type
+# from common.reader import prepare_data
 
 first_colors = ['darkred','darkgreen','darkblue']
 second_colors = ['indianred','forestgreen','royalblue']
@@ -53,11 +53,14 @@ def generate(dataset):
     
     pyplot.show()
 
-def generate_regression_graph(path_to_train_dataset, path_to_test_dataset):
-    pass
+def generate_regression_graph(targets, predictions):
+    pyplot.scatter(targets[0], targets[1], c="black")
+    pyplot.scatter(predictions[0], predictions[1], c="red")
+    pyplot.show()
 
 
 if __name__ == "__main__":
-    dataset = prepare_data(problem_type.Classification, "data/classification/data.simple.test.100.csv")
-    generate_classification_graph_of_points(dataset)
+    # dataset = prepare_data(problem_type.Classification, "data/classification/data.simple.test.100.csv")
+    # generate_classification_graph_of_points(dataset)
+    generate_regression_graph()
 

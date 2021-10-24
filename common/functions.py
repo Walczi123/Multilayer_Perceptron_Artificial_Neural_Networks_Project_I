@@ -52,10 +52,6 @@ class function_type():
     # Custom = None
     # Custom.derivative = None
 
-
-# def cross_entropy(Y_target, Y_prediction):
-   #  return np.mean(np.sum(-np.multiply(Y_target, np.log(Y_prediction + 1e-7)), axis=1))
-
 def cross_entropy(predictions, targets, epsilon=1e-12):
     """
     Computes cross entropy between targets (encoded as one-hot vectors)
@@ -66,5 +62,6 @@ def cross_entropy(predictions, targets, epsilon=1e-12):
     """
     predictions = np.clip(predictions, epsilon, 1. - epsilon)
     N = predictions.shape[0]
-    ce = -np.sum(targets*np.log(predictions+1e-9))/N
+    # ce = -np.sum(targets*np.log(predictions+1e-9))/N
+    ce = -np.sum(targets*np.log(predictions))/N
     return ce
