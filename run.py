@@ -15,12 +15,12 @@ PATH_TO_TEST_DATASET = "data/regression/data.cube.test.100.csv"
 
 
 LAYERS = [1, 3, 1]
-ACTIVATION_FUNCTION = function_type.Simple
-TRANSFER_FUNCTION = function_type.Simple
-EPOCHS = 1000
+ACTIVATION_FUNCTION = function_type.Sigmoid
+TRANSFER_FUNCTION = function_type.Sigmoid
+EPOCHS = 100
 LEARINN_RATE = 0.01
 LEARINN_COEFFICIENT = 0.01
-SEED = 3456
+SEED = 141
 SHOW_PERCENTAGE = 1
 BIAS = True
 

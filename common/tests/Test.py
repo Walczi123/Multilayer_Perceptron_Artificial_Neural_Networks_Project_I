@@ -17,7 +17,7 @@ class Test:
         np.random.seed(self.seed)
         for i in range(self.n_repetition):
             self.mpl.train(self.train_dataset[0])
-            _, loss = self.mpl.test(self.test_dataset[0])
+            _, loss, _ = self.mpl.test(self.test_dataset[0])
             results.append(((i+1)*self.mpl.epochs, loss))
         # print("saving to file")
         timestr = time.strftime("%d_%m_%Y-%H_%M-%S")
