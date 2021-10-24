@@ -2,6 +2,9 @@ import numpy as np
 from sklearn.datasets import make_blobs
 from sklearn.linear_model import LogisticRegression
 from matplotlib import pyplot
+from common.problem_type import problem_type
+
+from common.reader import prepare_data
 # from common.problem_type import problem_type
 # from common.reader import prepare_data
 
@@ -15,7 +18,7 @@ def generate_classification_graph_of_points(dataset):
 
     unique = np.unique(y)
     for class_value in range(len(unique)):
-        row_ix = np.where(y == class_value)
+        row_ix = np.where(y == class_value + 1)
         pyplot.scatter(X[row_ix, 0], X[row_ix, 1])
 
     pyplot.show()
@@ -50,19 +53,20 @@ def generate(dataset):
     # create scatter plot for samples from each class
     unique = np.unique(y)
     for class_value in range(len(unique)):
-        row_ix = np.where(y == class_value)
+        row_ix = np.where(y == class_value+1)
         pyplot.scatter(X[row_ix, 0], X[row_ix, 1], cmap='Paired')
 
     pyplot.show()
 
 
-def generate_regression_graph(targets, predictions):
+def generate_regression_graph(targets, predictions, train):
     pyplot.scatter(targets[0], targets[1], c="black")
     pyplot.scatter(predictions[0], predictions[1], c="red")
+    pyplot.scatter(train[0], train[1], c="green")
     pyplot.show()
 
 
 if __name__ == "__main__":
-    # dataset = prepare_data(problem_type.Classification, "data/classification/data.simple.test.100.csv")
-    # generate_classification_graph_of_points(dataset)
-    generate_regression_graph()
+    dataset = prepare_data(problem_type.Classification, "data/classification/data.simple.test.100.csv")
+    generate_classification_graph_of_points(dataset)
+    # generate_regression_graph()

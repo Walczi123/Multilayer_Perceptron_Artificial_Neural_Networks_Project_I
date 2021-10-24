@@ -74,18 +74,9 @@ class MLP:
             tmp1 = np.multiply(tmp, np.atleast_2d(outputs[layer]).T)
             D_weights.append(tmp1)
 
-        # D_weights = D_weights[::-1]
-        # D_weights = [k for k in reversed(D_weights)]
-        # D_biases = D_biases[::-1]
-        # print("WEI", self.weights)
-        # print("BIA", self.biases)
-        # print("WEIG_D",D_weights)
-        # print("BIAS_D",D_biases)
-        # input()
-        # PYTANIE: UPDATE wag przy propagacji wstecznej czy po przejściu przez wyszystkie wagi?
         for i in range(len(self.weights)-1, -1, -1):
             tmp_i = len(self.weights) - i - 1
-            self.weights[tmp_i] = self.learning_rate * D_weights[i]
+            self.weights[tmp_i] -= self.learning_rate * D_weights[i]
             if self.bias:
                 self.biases[tmp_i] -= self.learning_rate * D_biases[i]
 
@@ -113,7 +104,7 @@ class MLP:
         len_dataset = len(dataset)
         targets = []
         predictions = []
-        for i in range(len_dataset):  # tu był błąd, było -1 a nie powinno byc
+        for i in range(len_dataset): 
             data, result = dataset[i]
             prediction = self.predict(data)
             targets.append(result)
@@ -126,9 +117,9 @@ class MLP:
         print(f'Test progress status: {100}%')
         print('----TEST FINISHED----')
         prediction_rate = counter/len_dataset * 100
-        loss = mse(predictions, targets)
+        loss = 0 #mse(predictions, targets)
         print(f'Correct predicted rate: {prediction_rate}%')
-        print(f'Loss function : {loss}')
+        # print(f'Loss function : {loss}')
         return prediction_rate, loss, predictions
 
 
