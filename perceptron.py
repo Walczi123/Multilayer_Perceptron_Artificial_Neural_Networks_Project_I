@@ -16,7 +16,6 @@ class MLP:
             transfer_function (function): activation function used on the output layer
             epochs (int): number of epochs to learn
             learning_rate (float): learning rate coefficient
-            learning_coefficient (float): learning coefficient
             seed (int): number used as a seed for random number generator
         """
         np.random.seed(seed)
