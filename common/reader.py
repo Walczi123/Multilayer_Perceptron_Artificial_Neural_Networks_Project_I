@@ -7,6 +7,7 @@ def normalize_data(dataset):
     norm = np.linalg.norm(dataset)
     return [[elem[0], elem[1]/norm] for elem in dataset]
 
+
 def normalize(train_dataset, test_dataset):
     Y_train = [y for x, y in train_dataset]
     Y_test = [y for x, y in test_dataset]
@@ -14,9 +15,10 @@ def normalize(train_dataset, test_dataset):
     mins = np.min(Y_all, 0)
     maxs = np.max(Y_all, 0)
     diff = maxs - mins
-    train_dataset = [(x,(y-mins)/diff) for x,y in train_dataset]
-    test_dataset = [(x,(y-mins)/diff) for x,y in test_dataset]
+    train_dataset = [(x, (y-mins)/diff) for x, y in train_dataset]
+    test_dataset = [(x, (y-mins)/diff) for x, y in test_dataset]
     return train_dataset, test_dataset
+
 
 def read_file(filename: str, ):
     try:
@@ -37,8 +39,11 @@ def prepare_data(p_type: problem_type, filename: str, with_filename=False):
             return (dataset, filename)
         elif p_type == problem_type.Classification:
             dataset = []
+            classes_no = len(np.unique([y for _, _, y in data]))
             for row in data:
-                dataset.append([np.array([row[0], row[1]]), row[2]])
+                y_tmp = np.zeros(classes_no)
+                y_tmp[int(row[2]) - 1] = 1
+                dataset.append([np.array([row[0], row[1]]), y_tmp])
             if not with_filename:
                 return dataset
             return (dataset, filename)

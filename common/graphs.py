@@ -18,13 +18,13 @@ def generate_classification_graph_of_points(dataset):
 
     unique = np.unique(y)
     for class_value in range(len(unique)):
-        row_ix = np.where(y == class_value + 1)
+        row_ix = np.where(y == class_value)
         pyplot.scatter(X[row_ix, 0], X[row_ix, 1])
 
     pyplot.show()
 
 
-def generate(dataset):
+def generate(model, dataset, test_dataset):
     X = np.array([data[0] for data in dataset])
     y = np.array([data[1] for data in dataset])
     # define bounds of the domain
@@ -41,13 +41,13 @@ def generate(dataset):
     # horizontal stack vectors to create x1,x2 input for the model
     grid = np.hstack((r1, r2))
     # define the model
-    model = LogisticRegression()
     # fit the model
-    model.fit(X, y)
+    model.train(dataset)
     # make predictions for the grid
-    yhat = model.predict(grid)
+    # yhat = model.predict(grid)
+    _, _, predictions = model.test(test_dataset)
     # reshape the predictions back into a grid
-    zz = yhat.reshape(xx.shape)
+    zz = predictions
     # plot the grid of x, y and z values as a surface
     pyplot.contourf(xx, yy, zz, cmap='Paired')
     # create scatter plot for samples from each class
