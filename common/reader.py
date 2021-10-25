@@ -39,11 +39,13 @@ def prepare_data(p_type: problem_type, filename: str, with_filename=False):
             return (dataset, filename)
         elif p_type == problem_type.Classification:
             dataset = []
-            classes_no = len(np.unique([y for _, _, y in data]))
+            # classes_no = len(np.unique([y for _, _, y in data]))
+            # for row in data:
+            #     y_tmp = np.zeros(classes_no)
+            #     y_tmp[int(row[2]) - 1] = 1
+            #     dataset.append([np.array([row[0], row[1]]), y_tmp])
             for row in data:
-                y_tmp = np.zeros(classes_no)
-                y_tmp[int(row[2]) - 1] = 1
-                dataset.append([np.array([row[0], row[1]]), y_tmp])
+                dataset.append([np.array([row[0], row[1]]), row[2]])
             if not with_filename:
                 return dataset
             return (dataset, filename)

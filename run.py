@@ -56,11 +56,11 @@ if __name__ == "__main__":
         train_points = []
         for i in range(len(test_dataset)):
             points.append((test_dataset[i][0], predictions[i]))
-        for i in range(len(train_dataset)):
-            train_points.append(
-                (train_dataset[i][0], np.nonzero(train_dataset[i][1])))
+        # for i in range(len(train_dataset)):
+        #     train_points.append(
+        #         (train_dataset[i][0], np.nonzero(train_dataset[i][1])))
 
-        generate_classification_graph_of_points(points, train_points)
+        generate_classification_graph_of_points(points, train_dataset)
     # # generate( perceptron,train_dataset, test_dataset)
 
     # predictions123 = []
