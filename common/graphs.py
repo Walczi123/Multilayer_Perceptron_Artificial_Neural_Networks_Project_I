@@ -37,9 +37,9 @@ def generate_classification_graph_of_points(dataset, training):
 
 def generate_classification_graph_for_model(model12, dataset, test_dataset):
     # generate dataset
-    X, y = make_blobs(n_samples=1000, centers=2, n_features=2, random_state=1, cluster_std=3)
-    X1 = np.array([data[0] for data in dataset])
-    y2 = np.array([data[1] for data in dataset])
+    # X, y = make_blobs(n_samples=1000, centers=2, n_features=2, random_state=1, cluster_std=3)
+    X = np.array([data[0] for data in dataset])
+    y = np.array([data[1] for data in dataset])
     # define bounds of the domain
     min1, max1 = X[:, 0].min()-1, X[:, 0].max()+1
     min2, max2 = X[:, 1].min()-1, X[:, 1].max()+1
@@ -77,6 +77,20 @@ def generate_regression_graph(targets, predictions, train):
     pyplot.scatter(targets[0], targets[1], c="black")
     pyplot.scatter(predictions[0], predictions[1], c="red")
     pyplot.scatter(train[0], train[1], c="green")
+    pyplot.show()
+
+
+def generate_loss_function_graph(epochs, train_loss, test_loss):
+    # pyplot.scatter(epochs, train_loss, s=0.1, c="black")
+    # pyplot.scatter(epochs, test_loss, s=0.1, c="red")
+    # pyplot.show()
+
+    pyplot.plot(epochs, train_loss, 'g', label='Training accuracy')
+    pyplot.plot(epochs, test_loss, 'b', label='validation accuracy')
+    pyplot.title('Training and Validation accuracy')
+    pyplot.xlabel('Epochs')
+    pyplot.ylabel('Accuracy')
+    pyplot.legend()
     pyplot.show()
 
 
