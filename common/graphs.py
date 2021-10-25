@@ -9,17 +9,27 @@ from common.reader import prepare_data
 # from common.reader import prepare_data
 
 first_colors = ['darkred', 'darkgreen', 'darkblue']
-second_colors = ['indianred', 'forestgreen', 'royalblue']
+second_colors = ['lightcoral', 'lime', 'royalblue']
 
 
-def generate_classification_graph_of_points(dataset):
+def generate_classification_graph_of_points(dataset, training):
+    X = np.array([data[0] for data in training])
+    y = np.array([data[1] for data in training])
+
+    unique = np.unique(y)
+    for class_value in range(len(unique)):
+        row_ix = np.where(y == class_value)
+        pyplot.scatter(X[row_ix, 0], X[row_ix, 1],
+                       color=first_colors[class_value])
+
     X = np.array([data[0] for data in dataset])
     y = np.array([data[1] for data in dataset])
 
     unique = np.unique(y)
     for class_value in range(len(unique)):
         row_ix = np.where(y == class_value)
-        pyplot.scatter(X[row_ix, 0], X[row_ix, 1])
+        pyplot.scatter(X[row_ix, 0], X[row_ix, 1],
+                       color=second_colors[class_value])
 
     pyplot.show()
 
@@ -67,6 +77,7 @@ def generate_regression_graph(targets, predictions, train):
 
 
 if __name__ == "__main__":
-    dataset = prepare_data(problem_type.Classification, "data/classification/data.simple.test.100.csv")
+    dataset = prepare_data(problem_type.Classification,
+                           "data/classification/data.simple.test.100.csv")
     generate_classification_graph_of_points(dataset)
     # generate_regression_graph()

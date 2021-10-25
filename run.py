@@ -11,11 +11,13 @@ from matplotlib import pyplot
 PROBLEM_TYPE = problem_type.Classification
 # PATH_TO_TRAIN_DATASET = "data/regression/data.cube.train.100.csv"
 # PATH_TO_TEST_DATASET = "data/regression/data.cube.test.100.csv"
-PATH_TO_TRAIN_DATASET = "data/classification/data.simple.train.100.csv"
-PATH_TO_TEST_DATASET = "data/classification/data.simple.test.100.csv"
+# PATH_TO_TRAIN_DATASET = "data/classification/data.simple.train.100.csv"
+# PATH_TO_TEST_DATASET = "data/classification/data.simple.test.100.csv"
+PATH_TO_TRAIN_DATASET = "data/classification/data.three_gauss.train.100.csv"
+PATH_TO_TEST_DATASET = "data/classification/data.three_gauss.test.100.csv"
 
 
-LAYERS = [2, 32, 16, 2]
+LAYERS = [2, 32, 16, 3]
 ACTIVATION_FUNCTION = function_type.Sigmoid
 TRANSFER_FUNCTION = function_type.Softmax
 EPOCHS = 300
@@ -51,13 +53,19 @@ if __name__ == "__main__":
         generate_regression_graph((x, y), (x, predictions), (tx, ty))
     elif PROBLEM_TYPE == problem_type.Classification:
         points = []
+        train_points = []
         for i in range(len(test_dataset)):
             # points.append((test_dataset[i][0], np.nonzero(test_dataset[i][1])))
             points.append((test_dataset[i][0], predictions[i]))
+        for i in range(len(train_dataset)):
+            # points.append((test_dataset[i][0], np.nonzero(test_dataset[i][1])))
+            train_points.append(
+                (train_dataset[i][0], np.nonzero(train_dataset[i][1])))
+
         print("MIN: " + str(min(predictions)))
         print("MAX: " + str(max(predictions)))
 
-        generate_classification_graph_of_points(points)
+        generate_classification_graph_of_points(points, train_points)
     # # generate( perceptron,train_dataset, test_dataset)
 
     # predictions123 = []
