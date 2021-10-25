@@ -8,18 +8,19 @@ from matplotlib import pyplot
 
 # Parameters
 
-PROBLEM_TYPE = problem_type.Classification
-# PATH_TO_TRAIN_DATASET = "data/regression/data.cube.train.100.csv"
-# PATH_TO_TEST_DATASET = "data/regression/data.cube.test.100.csv"
+PROBLEM_TYPE = problem_type.Regression
+PATH_TO_TRAIN_DATASET = "data/regression/data.cube.train.100.csv"
+PATH_TO_TEST_DATASET = "data/regression/data.cube.test.100.csv"
 # PATH_TO_TRAIN_DATASET = "data/classification/data.simple.train.100.csv"
 # PATH_TO_TEST_DATASET = "data/classification/data.simple.test.100.csv"
-PATH_TO_TRAIN_DATASET = "data/classification/data.three_gauss.train.100.csv"
-PATH_TO_TEST_DATASET = "data/classification/data.three_gauss.test.100.csv"
+# PATH_TO_TRAIN_DATASET = "data/classification/data.three_gauss.train.100.csv"
+# PATH_TO_TEST_DATASET = "data/classification/data.three_gauss.test.100.csv"
 
 
-LAYERS = [2, 32, 16, 3]
+LAYERS = [1, 32, 16, 1]
 ACTIVATION_FUNCTION = function_type.Sigmoid
-OUTPUT_FUNCTION = function_type.Softmax
+# OUTPUT_FUNCTION = function_type.Softmax
+OUTPUT_FUNCTION = function_type.Simple
 EPOCHS = 100
 ITERATIONS = 100
 LEARINN_RATE = 0.01
@@ -63,7 +64,6 @@ if __name__ == "__main__":
         # generate_classification_graph_of_points(points, train_points)
         generate_classification_graph_for_model(perceptron, train_dataset, test_dataset)
 
-        print(perceptron.predict(np.array([0.1,0.1])))
 
     # LOSS FUNCTION
     # perceptron.epochs = 1
