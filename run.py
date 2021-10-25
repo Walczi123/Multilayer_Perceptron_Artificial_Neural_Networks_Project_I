@@ -19,51 +19,46 @@ PATH_TO_TEST_DATASET = "data/classification/data.three_gauss.test.100.csv"
 
 LAYERS = [2, 32, 16, 3]
 ACTIVATION_FUNCTION = function_type.Sigmoid
-TRANSFER_FUNCTION = function_type.Softmax
+OUTPUT_FUNCTION = function_type.Softmax
 EPOCHS = 300
 LEARINN_RATE = 0.01
-LEARINN_COEFFICIENT = 0.01
 SEED = 141
 SHOW_PERCENTAGE = 1
 BIAS = True
 
 if __name__ == "__main__":
-    perceptron = MLP(PROBLEM_TYPE, LAYERS, ACTIVATION_FUNCTION, TRANSFER_FUNCTION,
-                     EPOCHS, LEARINN_RATE, LEARINN_COEFFICIENT, SEED, BIAS)
+    perceptron = MLP(PROBLEM_TYPE, LAYERS, ACTIVATION_FUNCTION, OUTPUT_FUNCTION,
+                     EPOCHS, LEARINN_RATE, SEED, BIAS)
     train_dataset = prepare_data(PROBLEM_TYPE, PATH_TO_TRAIN_DATASET)
     test_dataset = prepare_data(PROBLEM_TYPE, PATH_TO_TEST_DATASET)
 
-    train_dataset, test_dataset = normalize(train_dataset, test_dataset)
-    x = []
-    y = []
-    for i in range(len(test_dataset)):
-        x.append(test_dataset[i][0])
-        y.append(test_dataset[i][1])
-
-    tx = []
-    ty = []
-    for i in range(len(train_dataset)):
-        tx.append(train_dataset[i][0])
-        ty.append(train_dataset[i][1])
+    if PROBLEM_TYPE == problem_type.Regression:
+        train_dataset, test_dataset = normalize(train_dataset, test_dataset)
 
     perceptron.train(train_dataset, SHOW_PERCENTAGE)
     _, _, predictions = perceptron.test(test_dataset, SHOW_PERCENTAGE)
 
     if PROBLEM_TYPE == problem_type.Regression:
+        x = []
+        y = []
+        for i in range(len(test_dataset)):
+            x.append(test_dataset[i][0])
+            y.append(test_dataset[i][1])
+
+        tx = []
+        ty = []
+        for i in range(len(train_dataset)):
+            tx.append(train_dataset[i][0])
+            ty.append(train_dataset[i][1])
         generate_regression_graph((x, y), (x, predictions), (tx, ty))
     elif PROBLEM_TYPE == problem_type.Classification:
         points = []
         train_points = []
         for i in range(len(test_dataset)):
-            # points.append((test_dataset[i][0], np.nonzero(test_dataset[i][1])))
             points.append((test_dataset[i][0], predictions[i]))
         for i in range(len(train_dataset)):
-            # points.append((test_dataset[i][0], np.nonzero(test_dataset[i][1])))
             train_points.append(
                 (train_dataset[i][0], np.nonzero(train_dataset[i][1])))
-
-        print("MIN: " + str(min(predictions)))
-        print("MAX: " + str(max(predictions)))
 
         generate_classification_graph_of_points(points, train_points)
     # # generate( perceptron,train_dataset, test_dataset)

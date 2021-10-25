@@ -8,7 +8,7 @@ class MLP:
     Neural Network Class
     """
 
-    def __init__(self, problem_type, layers, activation_function, transfer_function, epochs, learning_rate, learning_coefficient, seed, bias=False):
+    def __init__(self, problem_type, layers, activation_function, output_function, epochs, learning_rate, seed, bias=False):
         """
         Args:
             layers (list): list of layers in the network
@@ -23,10 +23,9 @@ class MLP:
         self.problem_type = problem_type
         self.layers = layers
         self.activation_function = activation_function
-        self.transfer_function = transfer_function
+        self.output_function = output_function
         self.epochs = epochs
         self.learning_rate = learning_rate
-        self.learning_coefficient = learning_coefficient
         self.bias = bias
 
         self.weights = []
@@ -35,15 +34,8 @@ class MLP:
             if self.bias:
                 b = np.random.randn(layers[i + 1])
                 self.biases.append(b / np.sqrt(layers[i + 1]))
-                # self.biases.append([1 for _ in range(layers[i + 1])])
             w = np.random.randn(layers[i], layers[i + 1])
-            # w = [[1 for _ in range(layers[i + 1])] for _ in range(layers[i])]
             self.weights.append(w / np.sqrt(layers[i]))
-            # self.weights.append(np.array(w))
-            # self.delta_weights = [np.zeros((layer_s[i], layer_s[i+1])) for i in range(len(layer_s)-1)
-        # ]
-        # self.biases = np.atleast_2d(self.biases)
-        # self.weights = np.atleast_2d(self.weights)
 
     def feed_forward(self, data):
         output = [data]
@@ -59,16 +51,13 @@ class MLP:
                 tmp = np.array([self.activation_function(x) for x in tmp])
             else:
                 if self.problem_type == problem_type.Classification:
-                    # tmp = np.zeros(self.layers[-1])
-                    # tmp = self.transfer_function(tmp)
                     tmp = np.array([self.activation_function(x) for x in tmp])
-                    # tmp[x_tmp.argmax()] = 1
                 elif self.problem_type == problem_type.Regression:
-                    tmp = np.array([self.transfer_function(x) for x in tmp])
+                    tmp = np.array([self.output_function(x) for x in tmp])
             output.append(tmp)
         return output, z
 
-    def backpropagation(self, outputs, z, result, data):
+    def backpropagation(self, outputs, z, result):
         error = outputs[-1] - np.array(result)
         D_weights = [np.multiply(np.atleast_2d(
             error), np.atleast_2d(outputs[-2]).T)]
@@ -95,7 +84,7 @@ class MLP:
         for i in range(self.epochs):
             for X, Y in dataset:
                 output, z = self.feed_forward(X)
-                self.backpropagation(output, z, Y, X)
+                self.backpropagation(output, z, Y)
             if i/self.epochs >= showing_param/100:
                 print(f'Training progress status: {showing_param}%')
                 showing_param += show_percentage
@@ -103,7 +92,11 @@ class MLP:
         print('----TRAINING FINISHED----')
 
     def predict(self, data):
-        return self.feed_forward(data)[0][-1]
+        prediction = self.feed_forward(data)[0][-1]
+        if self.problem_type == problem_type.Classification:
+            prediction = self.output_function(prediction)
+            prediction = np.argmax(prediction)
+        return prediction
 
     def test(self, dataset, show_percentage=1):
         print('----START TEST----')
@@ -116,16 +109,14 @@ class MLP:
             data, result = dataset[i]
             prediction = self.predict(data)
             if self.problem_type == problem_type.Classification:
-                prediction = self.transfer_function(prediction)
-                prediction = np.argmax(prediction)
                 result = np.nonzero(result)[0][0]
+                if prediction == result:
+                    counter += 1
             targets.append(result)
             predictions.append(prediction)
             if i/len_dataset >= showing_param/100:
                 print(f'Test progress status: {showing_param}%')
-                showing_param += show_percentage
-            if prediction == result:
-                counter += 1
+                showing_param += show_percentage   
         print(f'Test progress status: {100}%')
         print('----TEST FINISHED----')
         prediction_rate = counter/len_dataset * 100
