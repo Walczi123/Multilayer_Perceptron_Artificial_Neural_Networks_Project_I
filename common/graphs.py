@@ -6,8 +6,6 @@ from common.problem_type import problem_type
 from numpy import hstack
 
 from common.reader import prepare_data
-# from common.problem_type import problem_type
-# from common.reader import prepare_data
 
 first_colors = ['darkred', 'darkgreen', 'darkblue']
 second_colors = ['lightcoral', 'lime', 'royalblue']
@@ -19,7 +17,7 @@ def generate_classification_graph_of_points(dataset, training):
 
     unique = np.unique(y)
     for class_value in range(len(unique)):
-        row_ix = np.where(y == class_value)
+        row_ix = np.where(y == class_value + 1)
         pyplot.scatter(X[row_ix, 0], X[row_ix, 1],
                        color=first_colors[class_value])
 
@@ -28,7 +26,7 @@ def generate_classification_graph_of_points(dataset, training):
 
     unique = np.unique(y)
     for class_value in range(len(unique)):
-        row_ix = np.where(y == class_value)
+        row_ix = np.where(y == class_value + 1)
         pyplot.scatter(X[row_ix, 0], X[row_ix, 1],
                        color=second_colors[class_value])
 
