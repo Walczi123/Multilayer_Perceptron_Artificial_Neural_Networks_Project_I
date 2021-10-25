@@ -8,17 +8,17 @@ from matplotlib import pyplot
 
 # Parameters
 
-PROBLEM_TYPE = problem_type.Regression
-PATH_TO_TRAIN_DATASET = "data/regression/data.activation.train.1000.csv"
-PATH_TO_TEST_DATASET = "data/regression/data.activation.test.1000.csv"
-# PATH_TO_TRAIN_DATASET = "data/classification/data.simple.train.100.csv"
-# PATH_TO_TEST_DATASET = "data/classification/data.simple.test.100.csv"
+PROBLEM_TYPE = problem_type.Classification
+# PATH_TO_TRAIN_DATASET = "data/regression/data.cube.train.100.csv"
+# PATH_TO_TEST_DATASET = "data/regression/data.cube.test.100.csv"
+PATH_TO_TRAIN_DATASET = "data/classification/data.simple.train.100.csv"
+PATH_TO_TEST_DATASET = "data/classification/data.simple.test.100.csv"
 
 
-LAYERS = [1, 32, 16, 1]
-ACTIVATION_FUNCTION = function_type.Tanh
-TRANSFER_FUNCTION = function_type.Simple
-EPOCHS = 1000
+LAYERS = [2, 32, 16, 2]
+ACTIVATION_FUNCTION = function_type.Sigmoid
+TRANSFER_FUNCTION = function_type.Softmax
+EPOCHS = 300
 LEARINN_RATE = 0.01
 LEARINN_COEFFICIENT = 0.01
 SEED = 141
@@ -26,19 +26,12 @@ SHOW_PERCENTAGE = 1
 BIAS = True
 
 if __name__ == "__main__":
-    # perceptron = MLP(LAYERS, ACTIVATION_FUNCTION, TRANSFER_FUNCTION,
-    #                  EPOCHS, LEARINN_RATE, LEARINN_COEFFICIENT, SEED, BIAS)
-    # train_dataset = prepare_data(PROBLEM_TYPE, PATH_TO_TRAIN_DATASET)
-    # test_dataset = prepare_data(PROBLEM_TYPE, PATH_TO_TEST_DATASET)
-
-    # print("train", train_dataset[0][0], train_dataset[0][1])
-    # print("test", test_dataset[0][0], test_dataset[0][1])
+    perceptron = MLP( PROBLEM_TYPE, LAYERS, ACTIVATION_FUNCTION, TRANSFER_FUNCTION,
+                     EPOCHS, LEARINN_RATE, LEARINN_COEFFICIENT, SEED, BIAS)
+    train_dataset = prepare_data(PROBLEM_TYPE, PATH_TO_TRAIN_DATASET)
+    test_dataset = prepare_data(PROBLEM_TYPE, PATH_TO_TEST_DATASET)
 
     # train_dataset, test_dataset = normalize(train_dataset, test_dataset)
-
-    # print("train", train_dataset[0][0], train_dataset[0][1])
-    # print("test", test_dataset[0][0], test_dataset[0][1])
-
     # x = []
     # y = []
     # for i in range(len(test_dataset)):
@@ -51,14 +44,15 @@ if __name__ == "__main__":
     #     tx.append(train_dataset[i][0])
     #     ty.append(train_dataset[i][1])
 
-    # perceptron.train(train_dataset, SHOW_PERCENTAGE)
-    # _, _, predictions = perceptron.test(test_dataset, SHOW_PERCENTAGE)
-
+    perceptron.train(train_dataset, SHOW_PERCENTAGE)
+    _, _, predictions = perceptron.test(test_dataset, SHOW_PERCENTAGE)
+    # generate( perceptron,train_dataset, test_dataset)
     # generate_regression_graph((x, y), (x, predictions), (tx, ty))
+    points = []
+    for point in test_dataset:
+        points.append((point[0],point[1]))
 
-
-
-    # generate_classification_graph_of_points(predictions)
+    generate_classification_graph_of_points(points)
 
     # predictions123 = []
     # for _ in range(20):
@@ -81,7 +75,6 @@ if __name__ == "__main__":
     # # pyplot.scatter(x, predictions123[4], c="brown")
     # pyplot.show()
 
-    dataset = prepare_data(problem_type.Classification, "data/classification/data.simple.test.1000.csv")
-    generate(dataset)
+    # dataset = prepare_data(problem_type.Classification, "data/classification/data.simple.test.1000.csv")
+    # generate(dataset)
     # generate_classification_graph_of_points(dataset)
-
