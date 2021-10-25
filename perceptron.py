@@ -80,6 +80,13 @@ class MLP:
     def train(self, dataset, show_percentage=1):
         print('----START TRAINING----')
         showing_param = 0
+        dataset_tmp = []
+        classes_no = len(np.unique([y for _, y in dataset]))
+        for row in dataset:
+            y_tmp = np.zeros(classes_no)
+            y_tmp[int(row[1]) - 1] = 1
+            dataset_tmp.append([np.array(row[0]), y_tmp])
+        dataset = dataset_tmp
         np.random.shuffle(dataset)
         for i in range(self.epochs):
             for X, Y in dataset:
@@ -95,7 +102,7 @@ class MLP:
         prediction = self.feed_forward(data)[0][-1]
         if self.problem_type == problem_type.Classification:
             prediction = self.output_function(prediction)
-            prediction = np.argmax(prediction)
+            prediction = np.argmax(prediction) + 1
         return prediction
 
     def test(self, dataset, show_percentage=1):
@@ -109,7 +116,6 @@ class MLP:
             data, result = dataset[i]
             prediction = self.predict(data)
             if self.problem_type == problem_type.Classification:
-                result = np.nonzero(result)[0][0]
                 if prediction == result:
                     counter += 1
             targets.append(result)
