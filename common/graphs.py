@@ -5,8 +5,6 @@ from matplotlib import pyplot
 from common.problem_type import problem_type
 
 from common.reader import prepare_data
-# from common.problem_type import problem_type
-# from common.reader import prepare_data
 
 first_colors = ['darkred', 'darkgreen', 'darkblue']
 second_colors = ['lightcoral', 'lime', 'royalblue']
