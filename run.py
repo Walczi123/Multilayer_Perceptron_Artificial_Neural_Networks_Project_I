@@ -2,7 +2,7 @@ from common.functions import function_type
 from perceptron import MLP
 from common.problem_type import problem_type
 from common.reader import normalize, prepare_data
-from common.graphs import generate, generate_regression_graph, generate_classification_graph_of_points
+from common.graphs import generate_classification_graph_for_model, generate_regression_graph, generate_classification_graph_of_points
 import numpy as np
 from matplotlib import pyplot
 
@@ -20,7 +20,7 @@ PATH_TO_TEST_DATASET = "data/classification/data.three_gauss.test.100.csv"
 LAYERS = [2, 32, 16, 3]
 ACTIVATION_FUNCTION = function_type.Sigmoid
 TRANSFER_FUNCTION = function_type.Softmax
-EPOCHS = 300
+EPOCHS = 10
 LEARINN_RATE = 0.01
 LEARINN_COEFFICIENT = 0.01
 SEED = 141
@@ -65,8 +65,8 @@ if __name__ == "__main__":
         print("MIN: " + str(min(predictions)))
         print("MAX: " + str(max(predictions)))
 
-        generate_classification_graph_of_points(points, train_points)
-    # # generate( perceptron,train_dataset, test_dataset)
+        # generate_classification_graph_of_points(points, train_points)
+        generate_classification_graph_for_model(perceptron, train_dataset, test_dataset)
 
     # predictions123 = []
     # for _ in range(20):

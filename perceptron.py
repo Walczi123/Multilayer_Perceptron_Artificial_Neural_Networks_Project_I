@@ -35,15 +35,8 @@ class MLP:
             if self.bias:
                 b = np.random.randn(layers[i + 1])
                 self.biases.append(b / np.sqrt(layers[i + 1]))
-                # self.biases.append([1 for _ in range(layers[i + 1])])
             w = np.random.randn(layers[i], layers[i + 1])
-            # w = [[1 for _ in range(layers[i + 1])] for _ in range(layers[i])]
             self.weights.append(w / np.sqrt(layers[i]))
-            # self.weights.append(np.array(w))
-            # self.delta_weights = [np.zeros((layer_s[i], layer_s[i+1])) for i in range(len(layer_s)-1)
-        # ]
-        # self.biases = np.atleast_2d(self.biases)
-        # self.weights = np.atleast_2d(self.weights)
 
     def feed_forward(self, data):
         output = [data]
@@ -59,10 +52,7 @@ class MLP:
                 tmp = np.array([self.activation_function(x) for x in tmp])
             else:
                 if self.problem_type == problem_type.Classification:
-                    # tmp = np.zeros(self.layers[-1])
-                    # tmp = self.transfer_function(tmp)
                     tmp = np.array([self.activation_function(x) for x in tmp])
-                    # tmp[x_tmp.argmax()] = 1
                 elif self.problem_type == problem_type.Regression:
                     tmp = np.array([self.transfer_function(x) for x in tmp])
             output.append(tmp)
@@ -104,6 +94,12 @@ class MLP:
 
     def predict(self, data):
         return self.feed_forward(data)[0][-1]
+        
+    def predict_list(self, data):
+        result = []
+        for d in data:
+            result.append(self.predict(d))
+        return result
 
     def test(self, dataset, show_percentage=1):
         print('----START TEST----')

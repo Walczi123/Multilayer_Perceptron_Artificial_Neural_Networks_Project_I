@@ -3,6 +3,7 @@ from sklearn.datasets import make_blobs
 from sklearn.linear_model import LogisticRegression
 from matplotlib import pyplot
 from common.problem_type import problem_type
+from numpy import hstack
 
 from common.reader import prepare_data
 # from common.problem_type import problem_type
@@ -34,9 +35,11 @@ def generate_classification_graph_of_points(dataset, training):
     pyplot.show()
 
 
-def generate(model, dataset, test_dataset):
-    X = np.array([data[0] for data in dataset])
-    y = np.array([data[1] for data in dataset])
+def generate_classification_graph_for_model(model12, dataset, test_dataset):
+    # generate dataset
+    X, y = make_blobs(n_samples=1000, centers=2, n_features=2, random_state=1, cluster_std=3)
+    X1 = np.array([data[0] for data in dataset])
+    y2 = np.array([data[1] for data in dataset])
     # define bounds of the domain
     min1, max1 = X[:, 0].min()-1, X[:, 0].max()+1
     min2, max2 = X[:, 1].min()-1, X[:, 1].max()+1
@@ -49,21 +52,22 @@ def generate(model, dataset, test_dataset):
     r1, r2 = xx.flatten(), yy.flatten()
     r1, r2 = r1.reshape((len(r1), 1)), r2.reshape((len(r2), 1))
     # horizontal stack vectors to create x1,x2 input for the model
-    grid = np.hstack((r1, r2))
+    grid = hstack((r1,r2))
     # define the model
+    model = LogisticRegression()
     # fit the model
-    model.train(dataset)
+    model.fit(X, y)
     # make predictions for the grid
-    # yhat = model.predict(grid)
-    _, _, predictions = model.test(test_dataset)
+    yhat = model.predict(grid)
+    pre = model12.predict_list(grid)
     # reshape the predictions back into a grid
-    zz = predictions
+    zz = yhat.reshape(xx.shape)
     # plot the grid of x, y and z values as a surface
     pyplot.contourf(xx, yy, zz, cmap='Paired')
     # create scatter plot for samples from each class
     unique = np.unique(y)
     for class_value in range(len(unique)):
-        row_ix = np.where(y == class_value+1)
+        row_ix = np.where(y == class_value)
         pyplot.scatter(X[row_ix, 0], X[row_ix, 1], cmap='Paired')
 
     pyplot.show()
