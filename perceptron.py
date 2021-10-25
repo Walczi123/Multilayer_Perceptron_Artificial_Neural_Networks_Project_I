@@ -1,5 +1,6 @@
 import numpy as np
 from common.functions import function_type, cross_entropy, mse
+from common.problem_type import problem_type
 
 
 class MLP:
@@ -7,7 +8,7 @@ class MLP:
     Neural Network Class
     """
 
-    def __init__(self, layers, activation_function, transfer_function, epochs, learning_rate, learning_coefficient, seed, bias=False):
+    def __init__(self, problem_type, layers, activation_function, transfer_function, epochs, learning_rate, learning_coefficient, seed, bias=False):
         """
         Args:
             layers (list): list of layers in the network
@@ -19,6 +20,7 @@ class MLP:
             seed (int): number used as a seed for random number generator
         """
         np.random.seed(seed)
+        self.problem_type = problem_type
         self.layers = layers
         self.activation_function = activation_function
         self.transfer_function = transfer_function
@@ -56,7 +58,13 @@ class MLP:
             if i < (len(self.weights) - 1):
                 tmp = np.array([self.activation_function(x) for x in tmp])
             else:
-                tmp = np.array([self.transfer_function(x) for x in tmp])
+                if self.problem_type == problem_type.Classification:
+                    # tmp = np.zeros(self.layers[-1])
+                    # tmp = self.transfer_function(tmp)
+                    tmp = np.array([self.activation_function(x) for x in tmp])
+                    # tmp[x_tmp.argmax()] = 1
+                elif self.problem_type == problem_type.Regression:
+                    tmp = np.array([self.transfer_function(x) for x in tmp])
             output.append(tmp)
         return output, z
 
@@ -104,9 +112,13 @@ class MLP:
         len_dataset = len(dataset)
         targets = []
         predictions = []
-        for i in range(len_dataset): 
+        for i in range(len_dataset):
             data, result = dataset[i]
             prediction = self.predict(data)
+            if self.problem_type == problem_type.Classification:
+                prediction = self.transfer_function(prediction)
+                prediction = np.argmax(prediction)
+                result = np.nonzero(result)[0][0]
             targets.append(result)
             predictions.append(prediction)
             if i/len_dataset >= showing_param/100:
@@ -117,14 +129,14 @@ class MLP:
         print(f'Test progress status: {100}%')
         print('----TEST FINISHED----')
         prediction_rate = counter/len_dataset * 100
-        loss = 0 #mse(predictions, targets)
+        loss = 0  # mse(predictions, targets)
         print(f'Correct predicted rate: {prediction_rate}%')
         # print(f'Loss function : {loss}')
         return prediction_rate, loss, predictions
 
 
 if __name__ == "__main__":
-    perceptron = MLP([1, 3, 2, 10, 8, 1231, 513, 123, 1], function_type.Simple,
+    perceptron = MLP(problem_type.Regression, [1, 3, 2, 10, 8, 1231, 513, 123, 1], function_type.Simple,
                      function_type.Simple, 1, 0.5, 0.5, 0, True)
     # data_set = [[np.array([1,2]),1],[np.array([-1,-2]),0],[np.array([2,2]),1]]
     data_set = [[np.array([1]), 1]]
