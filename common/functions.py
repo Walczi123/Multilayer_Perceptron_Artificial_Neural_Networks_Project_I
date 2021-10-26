@@ -71,6 +71,19 @@ def hinge_f(prediction, target):
 
     return loss
 
+def msle(predictions, targets):
+    predictions = np.array(predictions)
+    min = predictions.min()
+    if min < 0:
+        predictions = predictions + (2*min)
+    log_t = np.log(targets)
+    log_p = np.log(predictions)
+    diff =  log_t - log_p
+    square = np.square(diff)
+    summation = sum(square)
+    return summation / len(targets)
+
+
 class function_type():
     Sigmoid = sigmoid
     Sigmoid.derivative = sigmoid_derivative
@@ -82,4 +95,6 @@ class function_type():
     Tanh.derivative = tanh_derivative
     Cross_entropy = cross_entropy
     MSE = mse
+    MSLE = msle
     Hinge = hinge
+    
