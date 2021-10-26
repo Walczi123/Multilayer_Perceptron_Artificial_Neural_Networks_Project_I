@@ -9,15 +9,15 @@ import numpy as np
 
 # region Datasets
 
-PROBLEM_TYPE = problem_type.Regression
+# PROBLEM_TYPE = problem_type.Regression
 # PATH_TO_TRAIN_DATASET = "data/regression/data.activation.train.1000.csv"
 # PATH_TO_TEST_DATASET = "data/regression/data.activation.test.1000.csv"
-PATH_TO_TRAIN_DATASET = "data/regression/data.cube.train.1000.csv"
-PATH_TO_TEST_DATASET = "data/regression/data.cube.test.1000.csv"
+# PATH_TO_TRAIN_DATASET = "data/regression/data.cube.train.1000.csv"
+# PATH_TO_TEST_DATASET = "data/regression/data.cube.test.1000.csv"
 
-# PROBLEM_TYPE = problem_type.Classification
-# PATH_TO_TRAIN_DATASET = "data/classification/data.simple.train.100.csv"
-# PATH_TO_TEST_DATASET = "data/classification/data.simple.test.100.csv"
+PROBLEM_TYPE = problem_type.Classification
+PATH_TO_TRAIN_DATASET = "data/classification/data.simple.train.100.csv"
+PATH_TO_TEST_DATASET = "data/classification/data.simple.test.100.csv"
 # PATH_TO_TRAIN_DATASET = "data/classification/data.three_gauss.train.100.csv"
 # PATH_TO_TEST_DATASET = "data/classification/data.three_gauss.test.100.csv"
 
@@ -26,17 +26,19 @@ PATH_TO_TEST_DATASET = "data/regression/data.cube.test.1000.csv"
 # region MPL Parameters
 
 # Regression
-ACTIVATION_FUNCTION = function_type.Sigmoid
-OUTPUT_FUNCTION = function_type.Indentity
-LOSS_FUNCTION = function_type.MSE
+# ACTIVATION_FUNCTION = function_type.Sigmoid
+# OUTPUT_FUNCTION = function_type.Indentity
+# LOSS_FUNCTION = function_type.MSE
 
 # Classification
-# ACTIVATION_FUNCTION = function_type.Sigmoid
-# OUTPUT_FUNCTION = function_type.Softmax
-# LOSS_FUNCTION = function_type.Cross_entropy
+ACTIVATION_FUNCTION = function_type.Sigmoid
+OUTPUT_FUNCTION = function_type.Softmax
+LOSS_FUNCTION = function_type.Cross_entropy
+# LOSS_FUNCTION = function_type.Hinge
 
-LAYERS = [1, 32, 16, 1]
-EPOCHS = 300
+LAYERS = [2, 32, 16, 2]
+# LAYERS = [1, 32, 16, 1]
+EPOCHS = 10
 LEARINN_RATE = 0.1
 SEED = 141
 SHOW_PERCENTAGE = 1
@@ -49,6 +51,7 @@ BIAS = True
 COMPUTE_LOSS = True
 ITERATIONS = 20
 STEP = 5
+DRAW_GRAPH = False
 
 # endregion
 
@@ -150,9 +153,9 @@ if __name__ == "__main__":
     predictions = train_and_test(perceptron, train_dataset, test_dataset)
 
     # Draw graphs
-    if PROBLEM_TYPE == problem_type.Regression:
+    if DRAW_GRAPH and PROBLEM_TYPE == problem_type.Regression:
         draw_regression(train_dataset, test_dataset, predictions)
-    elif PROBLEM_TYPE == problem_type.Classification:
+    elif DRAW_GRAPH and PROBLEM_TYPE == problem_type.Classification:
         draw_classification(train_dataset, test_dataset, predictions)
 
 
