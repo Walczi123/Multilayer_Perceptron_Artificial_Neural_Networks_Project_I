@@ -48,14 +48,42 @@ def mse(predicteds, targets):
     summation = sum(square)
     return summation / len(targets)
 
-def hinge(actual, predicted):
+def hinge(predicteds, targets):
     # replacing 0 = -1
-    new_predicted = np.array([-1 if i==2 else i for i in predicted])
-    new_actual = np.array([-1 if i==2 else i for i in actual])
+    new_predicted = np.array([-1 if i==2 else i for i in predicteds])
+    new_actual = np.array([-1 if i==2 else i for i in targets])
 
     # calculating hinge loss
     hinge_loss = np.mean([max(0, 1-x*y) for x, y in zip(new_actual, new_predicted)])
     return hinge_loss
+
+def hinge_f(prediction, target):
+    prediction = np.array(prediction)
+    target = np.array(target)
+    Y_target_1 = np.argmax(target)
+    N = prediction.shape[0]
+    delta = 1.0  # A fixed margin
+    # correct_scores = prediction[np.arange(N), Y_target_1]
+
+    diffs = np.maximum(0, prediction - target + delta)
+    # diffs[np.arange(N), Y_target_1] = 0
+    loss = np.sum(diffs) / N
+
+    return loss
+
+def msle(predictions, targets):
+    targets=np.array(targets)
+    predictions = np.concatenate(predictions)
+    min = predictions.min()
+    if min < 0:
+        predictions = predictions - (2*min)
+        targets = targets - (2*min)
+    log_t = np.log(targets)
+    log_p = np.log(predictions)
+    diff =  log_t - log_p
+    square = np.square(diff)
+    summation = sum(square)
+    return summation / len(targets)
 
 
 class function_type():
@@ -69,4 +97,6 @@ class function_type():
     Tanh.derivative = tanh_derivative
     Cross_entropy = cross_entropy
     MSE = mse
+    MSLE = msle
     Hinge = hinge
+    
