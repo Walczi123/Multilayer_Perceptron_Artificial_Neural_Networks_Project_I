@@ -1,5 +1,5 @@
 import numpy as np
-from common.functions import function_type, cross_entropy, mse
+from common.functions import cross_entropy, mse
 from common.problem_type import problem_type
 
 
@@ -8,7 +8,7 @@ class MLP:
     Neural Network Class
     """
 
-    def __init__(self, problem_type, layers, activation_function, output_function, epochs, learning_rate, seed, bias=False):
+    def __init__(self, problem_type, layers, activation_function, output_function, loss_function, epochs, learning_rate, seed, bias=False):
         """
         Args:
             layers (list): list of layers in the network
@@ -23,6 +23,7 @@ class MLP:
         self.layers = layers
         self.activation_function = activation_function
         self.output_function = output_function
+        self.loss_function = loss_function
         self.epochs = epochs
         self.learning_rate = learning_rate
         self.bias = bias
@@ -96,7 +97,7 @@ class MLP:
                 self.backpropagation(output, z, Y)
             if i/self.epochs >= showing_param/100:
                 if print_flag:
-                    print(f'Training progress status: {showing_param}%')
+                    print(f'Training progress status: {round(i/self.epochs * 100, 2)}%')
                 showing_param += show_percentage
         if print_flag:
             print(f'Training progress status: {100}%')
@@ -135,26 +136,15 @@ class MLP:
             predictions.append(prediction)
             if i/len_dataset >= showing_param/100:
                 if print_flag:
-                    print(f'Test progress status: {showing_param}%')
+                    print(f'Test progress status: {round(i/len_dataset * 100, 2)}%')
                 showing_param += show_percentage
         if print_flag:
             print(f'Test progress status: {100}%')
-        if print_flag:
             print('----TEST FINISHED----')
         prediction_rate = counter/len_dataset * 100
-        loss = 0  # mse(predictions, targets)
-        loss = cross_entropy(predictions, targets)
+        loss = self.loss_function(predictions, targets)
         if print_flag:
-            print(f'Correct predicted rate: {prediction_rate}%')
-        # print(f'Loss function : {loss}')
+            if self.problem_type == problem_type.Classification: print(f'Correct predicted rate: {prediction_rate}%')
+            print(f'Loss function : {loss}')
         return prediction_rate, loss, predictions
 
-
-if __name__ == "__main__":
-    perceptron = MLP(problem_type.Regression, [1, 3, 2, 10, 8, 1231, 513, 123, 1], function_type.Simple,
-                     function_type.Simple, 1, 0.5, 0.5, 0, True)
-    # data_set = [[np.array([1,2]),1],[np.array([-1,-2]),0],[np.array([2,2]),1]]
-    data_set = [[np.array([1]), 1]]
-    perceptron.train(data_set)
-    print("-------")
-    print(perceptron.predict(data_set[0][0]))
