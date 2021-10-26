@@ -72,10 +72,12 @@ def hinge_f(prediction, target):
     return loss
 
 def msle(predictions, targets):
-    predictions = np.array(predictions)
+    targets=np.array(targets)
+    predictions = np.concatenate(predictions)
     min = predictions.min()
     if min < 0:
-        predictions = predictions + (2*min)
+        predictions = predictions - (2*min)
+        targets = targets - (2*min)
     log_t = np.log(targets)
     log_p = np.log(predictions)
     diff =  log_t - log_p

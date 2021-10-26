@@ -28,8 +28,8 @@ PATH_TO_TEST_DATASET = "data/regression/data.activation.test.1000.csv"
 # Regression
 ACTIVATION_FUNCTION = function_type.Sigmoid
 OUTPUT_FUNCTION = function_type.Indentity
-LOSS_FUNCTION = function_type.MSE
-# LOSS_FUNCTION = function_type.MSLE
+# LOSS_FUNCTION = function_type.MSE
+LOSS_FUNCTION = function_type.MSLE
 
 # Classification
 # ACTIVATION_FUNCTION = function_type.Sigmoid
