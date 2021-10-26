@@ -19,7 +19,7 @@ def generate_classification_graph_of_points(dataset, training):
     for class_value in range(len(unique)):
         row_ix = np.where(y == class_value + 1)
         pyplot.scatter(X[row_ix, 0], X[row_ix, 1],
-                       color=first_colors[class_value])
+                       color=first_colors[class_value], label = str(class_value + 1))
 
     X = np.array([data[0] for data in dataset])
     y = np.array([data[1] for data in dataset])
@@ -28,8 +28,12 @@ def generate_classification_graph_of_points(dataset, training):
     for class_value in range(len(unique)):
         row_ix = np.where(y == class_value + 1)
         pyplot.scatter(X[row_ix, 0], X[row_ix, 1],
-                       color=second_colors[class_value])
+                       color=second_colors[class_value], label = str(class_value + 1))
 
+    pyplot.title('Classification of points')
+    pyplot.xlabel('x')
+    pyplot.ylabel('y')
+    pyplot.legend()
     pyplot.show()
 
 
@@ -61,6 +65,9 @@ def generate_classification_graph_for_modelv2(model12, dataset, test_dataset):
         row_ix = np.where(y == class_value+1)
         pyplot.scatter(X[row_ix, 0], X[row_ix, 1], label = str(class_value+1), color = first_colors[class_value])
 
+    pyplot.title('Classification for model')
+    pyplot.xlabel('x')
+    pyplot.ylabel('y')
     pyplot.legend()
     pyplot.show()
 
@@ -93,26 +100,29 @@ def generate_classification_graph_for_model(model12, dataset, test_dataset):
         row_ix = np.where(y == class_value+1)
         pyplot.scatter(X[row_ix, 0], X[row_ix, 1], label = str(class_value+1), color = first_colors[class_value])
 
+    pyplot.title('Classification for model')
+    pyplot.xlabel('x')
+    pyplot.ylabel('y')
     pyplot.legend()
     pyplot.show()
 
 def generate_regression_graph(targets, predictions, train):
-    pyplot.scatter(targets[0], targets[1], c="black")
-    pyplot.scatter(predictions[0], predictions[1], c="red")
-    pyplot.scatter(train[0], train[1], c="green")
+    pyplot.scatter(targets[0], targets[1], c="black", label="targets", s=50)
+    pyplot.scatter(train[0], train[1], c="green", label="train set", s=20)
+    pyplot.scatter(predictions[0], predictions[1], c="red", label="predictions", s=1)
+    pyplot.title('Regression graph')
+    pyplot.xlabel('x')
+    pyplot.ylabel('y')
+    pyplot.legend()
     pyplot.show()
 
 
 def generate_loss_function_graph(epochs, train_loss, test_loss):
-    # pyplot.scatter(epochs, train_loss, s=0.1, c="black")
-    # pyplot.scatter(epochs, test_loss, s=0.1, c="red")
-    # pyplot.show()
-
     pyplot.plot(epochs, train_loss, 'g', label='Training accuracy')
-    pyplot.plot(epochs, test_loss, 'b', label='validation accuracy')
-    pyplot.title('Training and Validation accuracy')
+    pyplot.plot(epochs, test_loss, 'b', label='Test accuracy')
+    pyplot.title('Training and test loss function')
     pyplot.xlabel('Epochs')
-    pyplot.ylabel('Accuracy')
+    pyplot.ylabel('Loss')
     pyplot.legend()
     pyplot.show()
 
