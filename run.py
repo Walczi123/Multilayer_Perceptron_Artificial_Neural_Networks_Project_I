@@ -9,37 +9,41 @@ import numpy as np
 
 # region Datasets
 
-PROBLEM_TYPE = problem_type.Regression
-PATH_TO_TRAIN_DATASET = "data/regression/data.activation.train.1000.csv"
-PATH_TO_TEST_DATASET = "data/regression/data.activation.test.1000.csv"
+# PROBLEM_TYPE = problem_type.Regression
+# PATH_TO_TRAIN_DATASET = "data/regression/data.activation.train.1000.csv"
+# PATH_TO_TEST_DATASET = "data/regression/data.activation.test.1000.csv"
 # PATH_TO_TRAIN_DATASET = "data/regression/data.cube.train.1000.csv"
 # PATH_TO_TEST_DATASET = "data/regression/data.cube.test.1000.csv"
+PATH_TO_TRAIN_DATASET = "data/test/Regression/data.multimodal.train.1000.csv"
+PATH_TO_TEST_DATASET = "data/test/Regression/data.multimodal.test.1000.csv"
 
-# PROBLEM_TYPE = problem_type.Classification
+PROBLEM_TYPE = problem_type.Classification
 # PATH_TO_TRAIN_DATASET = "data/classification/data.simple.train.100.csv"
 # PATH_TO_TEST_DATASET = "data/classification/data.simple.test.100.csv"
 # PATH_TO_TRAIN_DATASET = "data/classification/data.three_gauss.train.100.csv"
 # PATH_TO_TEST_DATASET = "data/classification/data.three_gauss.test.100.csv"
+PATH_TO_TRAIN_DATASET = "data/test/Classification/data.circles.train.1000.csv"
+PATH_TO_TEST_DATASET = "data/test/Classification/data.circles.test.1000.csv"
 
-# endregion 
+# endregion
 
 # region MPL Parameters
 
 # Regression
 ACTIVATION_FUNCTION = function_type.Sigmoid
 OUTPUT_FUNCTION = function_type.Indentity
-# LOSS_FUNCTION = function_type.MSE
-LOSS_FUNCTION = function_type.MSLE
+LOSS_FUNCTION = function_type.MSE
+# LOSS_FUNCTION = function_type.MSLE
 
 # Classification
-# ACTIVATION_FUNCTION = function_type.Sigmoid
-# OUTPUT_FUNCTION = function_type.Softmax
-# LOSS_FUNCTION = function_type.Cross_entropy
+ACTIVATION_FUNCTION = function_type.Sigmoid
+OUTPUT_FUNCTION = function_type.Softmax
+LOSS_FUNCTION = function_type.Cross_entropy
 # LOSS_FUNCTION = function_type.Hinge
 
-LAYERS = [1, 32, 16, 1]
-# LAYERS = [1, 32, 16, 1]
-EPOCHS = 10
+LAYERS = [1, 1]
+LAYERS = [2, 6,4, 4]
+EPOCHS = 300
 LEARINN_RATE = 0.1
 SEED = 141
 SHOW_PERCENTAGE = 1
@@ -49,10 +53,10 @@ BIAS = True
 
 # region Drawing Parameters
 
-COMPUTE_LOSS = True
+COMPUTE_LOSS = False
 ITERATIONS = 20
 STEP = 1
-DRAW_GRAPH = False
+DRAW_GRAPH = True
 
 # endregion
 
@@ -149,7 +153,7 @@ if __name__ == "__main__":
 
     # Performe normalization if needed
     (train_dataset, test_dataset) = normalize_dataset(train_dataset, test_dataset)
-    
+
     # Train and test (drawing loss function)
     predictions = train_and_test(perceptron, train_dataset, test_dataset)
 
@@ -161,4 +165,3 @@ if __name__ == "__main__":
 
 
 
-  
