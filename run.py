@@ -36,7 +36,7 @@ LOSS_FUNCTION = function_type.MSE
 # LOSS_FUNCTION = function_type.Cross_entropy
 
 LAYERS = [1, 32, 16, 1]
-EPOCHS = 300
+EPOCHS = 1000
 LEARINN_RATE = 0.1
 SEED = 141
 SHOW_PERCENTAGE = 1
