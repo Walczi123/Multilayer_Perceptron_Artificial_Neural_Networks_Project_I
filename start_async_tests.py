@@ -19,6 +19,29 @@ def generate_instances():
     result.append(Test(mpl, train_dataset, test_dataset, n_repetition=REPETITIONS,
                        name="mpl121", seed=SEED))
 
+    # warsty 
+    4 x rozne warsty x 2 rozne problemy x 2 bias x 3 funkcje aktywacji (sigmoid, tanh, identity/gauss) = 156
+    [1,1] [1,2,1], [1,4,2,1],[1,8,4,2,1], [1,16,8,4,2,1]
+    [1,8,1], [1,16,8,1],[1,32,16,8,1], [1,64,32,16,8,1]
+    [1,32,1], [1,64,32,1],[1,128,64,32,1], [1,256,128,64,32,1]
+    
+    # biasy
+    # funkcje aktywacji 3
+    
+    ile iteracji = 1000
+
+
+    datasety (8) x 2 licznosci (1000 i 100) = 16
+
+    wykresy:
+    - wykresy błedów (2)
+    - wykresy wynikowe 
+    czyli 3 wykresy
+
+
+    nazwa pliku:
+    Rodzaj probleu - ilośc warst - ilośc nodów - biases - funkcja aktywacji - dataset - licznośc datasetu -(wykres błedu/wynikowy).csv
+
     return result
 
 
