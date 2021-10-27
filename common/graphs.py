@@ -117,10 +117,13 @@ def generate_regression_graph(targets, predictions, train):
     pyplot.show()
 
 
-def generate_loss_function_graph(epochs, train_loss, test_loss):
+def generate_loss_function_graph(epochs, train_loss, test_loss, loss_function = ""):
     pyplot.plot(epochs, train_loss, 'g', label='Training accuracy')
     pyplot.plot(epochs, test_loss, 'b', label='Test accuracy')
-    pyplot.title('Training and test loss function')
+    title = 'Training and test loss function'
+    if loss_function != "":
+        title += ' (' + loss_function + ')'
+    pyplot.title(title)
     pyplot.xlabel('Epochs')
     pyplot.ylabel('Loss')
     pyplot.legend()
