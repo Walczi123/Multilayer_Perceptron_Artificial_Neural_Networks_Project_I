@@ -117,7 +117,7 @@ class MLP:
             result.append(self.predict(d))
         return result
 
-    def test(self, dataset, show_percentage=1):
+    def test(self, dataset, show_percentage=-1):
         print_flag = show_percentage != -1
         if print_flag:
             print('----START TEST----')
