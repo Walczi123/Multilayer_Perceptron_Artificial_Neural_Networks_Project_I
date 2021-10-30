@@ -107,11 +107,12 @@ def run_test(test):
 
 def run_tests():
     iterable = generate_instances()
-    iterable = iterable[:100] # part 100
+    iterable = iterable[200:300] # part 100-200
 
     start_time = time.time()
 
-    p = multiprocessing.Pool()
+    max_cpu = multiprocessing.cpu_count()
+    p = multiprocessing.Pool(int(max_cpu/2))
     for _ in tqdm.tqdm(p.imap_unordered(run_test, iterable), total=len(iterable)):
         pass
     # p.map_async(run_test, iterable)
@@ -124,3 +125,4 @@ def run_tests():
 
 if __name__ == '__main__':
     run_tests()
+    # print(multiprocessing.cpu_count())
