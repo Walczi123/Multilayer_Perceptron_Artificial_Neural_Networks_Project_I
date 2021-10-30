@@ -106,7 +106,9 @@ def run_test(test):
 
 
 def run_tests():
-    iterable = generate_instances()[:10]
+    iterable = generate_instances()
+    iterable = iterable[:100] # part 100
+
     start_time = time.time()
 
     p = multiprocessing.Pool()
