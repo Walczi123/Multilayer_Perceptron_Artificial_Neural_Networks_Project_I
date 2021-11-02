@@ -38,6 +38,7 @@ LOSS_FUNCTION = function_type.MSE
 # LOSS_FUNCTION = function_type.Hinge
 
 LAYERS = [1, 32, 16, 1]
+# LAYERS = [1, 32, 16, 1]
 EPOCHS = 10
 LEARINN_RATE = 0.1
 SEED = 141
