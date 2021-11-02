@@ -71,7 +71,8 @@ def generate_classification_graph_for_modelv2(model12, dataset, test_dataset):
     pyplot.legend()
     pyplot.show()
 
-def generate_classification_graph_for_model(model12, dataset, test_dataset):
+def generate_classification_graph_for_model(model12, dataset, test_dataset, file_path=None):
+    pyplot.clf()
     X = np.array([data[0] for data in dataset])
     y = np.array([data[1] for data in dataset])
     min1, max1 = X[:, 0].min(), X[:, 0].max()
@@ -104,9 +105,13 @@ def generate_classification_graph_for_model(model12, dataset, test_dataset):
     pyplot.xlabel('x')
     pyplot.ylabel('y')
     pyplot.legend()
-    pyplot.show()
+    if file_path == None:
+        pyplot.show()
+    else:
+        pyplot.savefig(file_path)
 
-def generate_regression_graph(targets, predictions, train):
+def generate_regression_graph(targets, predictions, train, file_path=None):
+    pyplot.clf()
     pyplot.scatter(targets[0], targets[1], c="black", label="targets", s=50)
     pyplot.scatter(train[0], train[1], c="green", label="train set", s=20)
     pyplot.scatter(predictions[0], predictions[1], c="red", label="predictions", s=1)
@@ -114,10 +119,14 @@ def generate_regression_graph(targets, predictions, train):
     pyplot.xlabel('x')
     pyplot.ylabel('y')
     pyplot.legend()
-    pyplot.show()
+    if file_path == None:
+        pyplot.show()
+    else:
+        pyplot.savefig(file_path)
 
 
-def generate_loss_function_graph(epochs, train_loss, test_loss, loss_function = ""):
+def generate_loss_function_graph(epochs, train_loss, test_loss, loss_function = "", file_path=None):
+    pyplot.clf()
     pyplot.plot(epochs, train_loss, 'g', label='Training accuracy')
     pyplot.plot(epochs, test_loss, 'b', label='Test accuracy')
     title = 'Training and test loss function'
@@ -127,7 +136,23 @@ def generate_loss_function_graph(epochs, train_loss, test_loss, loss_function = 
     pyplot.xlabel('Epochs')
     pyplot.ylabel('Loss')
     pyplot.legend()
-    pyplot.show()
+    if file_path == None:
+        pyplot.show()
+    else:
+        pyplot.savefig(file_path)
+
+def draw_regression(train_dataset, test_dataset, predictions, file_path = None):
+    x = []
+    y = []
+    for i in range(len(test_dataset)):
+        x.append(test_dataset[i][0])
+        y.append(test_dataset[i][1])
+    tx = []
+    ty = []
+    for i in range(len(train_dataset)):
+        tx.append(train_dataset[i][0])
+        ty.append(train_dataset[i][1])
+    generate_regression_graph((x, y), (x, predictions), (tx, ty), file_path)
 
 
 if __name__ == "__main__":
