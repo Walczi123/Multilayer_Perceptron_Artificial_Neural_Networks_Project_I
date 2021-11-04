@@ -77,7 +77,7 @@ class MLP:
             if self.bias:
                 self.biases[tmp_i] -= self.learning_rate * D_biases[i]
 
-    def train(self, dataset, show_percentage=1):
+    def train(self, dataset, show_percentage=1, category_shift=1):
         print_flag = show_percentage != -1
         if print_flag:
             print('----START TRAINING----')
@@ -87,7 +87,7 @@ class MLP:
             classes_no = len(np.unique([y for _, y in dataset]))
             for row in dataset:
                 y_tmp = np.zeros(classes_no)
-                y_tmp[int(row[1]) - 1] = 1
+                y_tmp[int(row[1]) - category_shift] = 1
                 dataset_tmp.append([np.array(row[0]), y_tmp])
             dataset = dataset_tmp
         np.random.shuffle(dataset)
@@ -97,18 +97,19 @@ class MLP:
                 self.backpropagation(output, z, Y)
             if i/self.epochs >= showing_param/100:
                 if print_flag:
-                    print(f'Training progress status: {round(i/self.epochs * 100, 2)}%')
+                    print(
+                        f'Training progress status: {round(i/self.epochs * 100, 2)}%')
                 showing_param += show_percentage
         if print_flag:
             print(f'Training progress status: {100}%')
         if print_flag:
             print('----TRAINING FINISHED----')
 
-    def predict(self, data):
+    def predict(self, data, category_shift=1):
         prediction = self.feed_forward(data)[0][-1]
         if self.problem_type == problem_type.Classification:
             prediction = self.output_function(prediction)
-            prediction = np.argmax(prediction) + 1
+            prediction = np.argmax(prediction) + category_shift
         return prediction
 
     def predict_list(self, data):
@@ -117,7 +118,7 @@ class MLP:
             result.append(self.predict(d))
         return result
 
-    def test(self, dataset, show_percentage=-1):
+    def test(self, dataset, show_percentage=1, category_shift=1):
         print_flag = show_percentage != -1
         if print_flag:
             print('----START TEST----')
@@ -128,7 +129,7 @@ class MLP:
         predictions = []
         for i in range(len_dataset):
             data, result = dataset[i]
-            prediction = self.predict(data)
+            prediction = self.predict(data, category_shift=category_shift)
             if self.problem_type == problem_type.Classification:
                 if prediction == result:
                     counter += 1
@@ -136,7 +137,8 @@ class MLP:
             predictions.append(prediction)
             if i/len_dataset >= showing_param/100:
                 if print_flag:
-                    print(f'Test progress status: {round(i/len_dataset * 100, 2)}%')
+                    print(
+                        f'Test progress status: {round(i/len_dataset * 100, 2)}%')
                 showing_param += show_percentage
         if print_flag:
             print(f'Test progress status: {100}%')
@@ -144,7 +146,7 @@ class MLP:
         prediction_rate = counter/len_dataset * 100
         loss = self.loss_function(predictions, targets)
         if print_flag:
-            if self.problem_type == problem_type.Classification: print(f'Correct predicted rate: {prediction_rate}%')
+            if self.problem_type == problem_type.Classification:
+                print(f'Correct predicted rate: {prediction_rate}%')
             print(f'Loss function : {loss}')
         return prediction_rate, loss, predictions
-
