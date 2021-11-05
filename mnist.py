@@ -24,7 +24,7 @@ else:
 # test_y - list of labels of MN IST testing images
 (train_X, train_y), (test_X, test_y) = mnist.load_data()
 
-TAKE_PART = 1
+TAKE_PART = 100
 
 train_dataset = []
 # r = len(train_X)
@@ -47,15 +47,15 @@ OUTPUT_FUNCTION = function_type.Softmax
 LOSS_FUNCTION = function_type.Cross_entropy
 # LAYERS = [image_len, classes_no]
 LAYERS = [image_len, 700, 500, classes_no]
-EPOCHS = 40
+EPOCHS = 20
 LEARINN_RATE = 0.001
-SEED = 141
+SEED = 1231
 SHOW_PERCENTAGE = 0.01
 BIAS = True
 
 def save_to_file(rate):
     timestr = time.strftime("%d_%m_%Y-%H_%M-%S")
-    f = open(f"MNIST_{timestr}", "w")
+    f = open(f"minst/MNIST_{timestr}", "w")
     f.write(f"Rate: {rate}\n")
     f.write(f"Layers: {LAYERS}\n")
     f.write(f"Seed: {SEED}\n")

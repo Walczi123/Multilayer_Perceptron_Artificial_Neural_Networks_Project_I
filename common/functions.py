@@ -29,6 +29,13 @@ def tanh(x):
 def tanh_derivative(x):
     return 1.0 - np.tanh(x)**2
 
+def relu(x):
+    return np.maximum(x, 0)
+
+
+def relu_derivative(x):
+    return np.greater(x, 0).astype(int)
+
 # def cross_entropy(predictions, targets, epsilon=1e-12):
 #     # predictions = np.clip(predictions, epsilon, 1. - epsilon)
 #     predictions = np.array(predictions)
@@ -95,6 +102,8 @@ class function_type():
     Softmax.derivative = softmax_derivative
     Tanh = tanh
     Tanh.derivative = tanh_derivative
+    Relu = relu
+    Relu.derivative = relu_derivative
     Cross_entropy = cross_entropy
     MSE = mse
     MSLE = msle

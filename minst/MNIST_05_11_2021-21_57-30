@@ -1,0 +1,8 @@
+Rate: 8.0
+Layers: [784, 700, 400, 10]
+Seed: 141
+Learning rate: 0.001
+Activation function: relu
+Output function: softmax
+Epochs: 10
+Part of dataset: 100
