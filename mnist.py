@@ -9,6 +9,21 @@ from perceptron import MLP
 import numpy as np
 import requests
 requests.packages.urllib3.disable_warnings()
+
+
+def invert_images(images):
+    for img in images:
+        img = 255 - img
+    return images
+
+
+def threshold_images(images, threshold):
+    for img in images:
+        img[img > threshold] = 255
+        img[img <= threshold] = 0
+    return images
+
+
 try:
     _create_unverified_https_context = ssl._create_unverified_context
 except AttributeError:
@@ -24,19 +39,30 @@ else:
 # test_y - list of labels of MN IST testing images
 (train_X, train_y), (test_X, test_y) = mnist.load_data()
 
-TAKE_PART = 1
+TAKE_PART = 100
+INVERT = False
+THRESHOLD = True
+THRESHOLD_VALUE = 127
+
+if INVERT:
+    train_X = invert_images(train_X)
+    test_Y = invert_images(test_X)
+
+if THRESHOLD:
+    train_X = threshold_images(train_X, THRESHOLD_VALUE)
+    test_X = threshold_images(test_X, THRESHOLD_VALUE)
 
 train_dataset = []
 # r = len(train_X)
 r_train = int(len(train_X)/TAKE_PART)
 for idx in range(r_train):
-# for idx in range(300):
+    # for idx in range(300):
     train_dataset.append([np.array(train_X[idx].flatten()), train_y[idx]])
 test_dataset = []
 # r = len(test_X)
 r_test = int(len(test_X)/TAKE_PART)
 for idx in range(r_test):
-# for idx in range(10):
+    # for idx in range(10):
     test_dataset.append([np.array(test_X[idx].flatten()), test_y[idx]])
 
 image_len = 28 * 28
@@ -62,6 +88,9 @@ def save_to_file(rates):
     f.write(f"Activation function: {ACTIVATION_FUNCTION.__name__}\n")
     f.write(f"Output function: {OUTPUT_FUNCTION.__name__}\n")
     f.write(f"Epochs: {EPOCHS}\n")
+    f.write(f"Inverted: {INVERT}")
+    f.write(f"Thresholded: {THRESHOLD}")
+    f.write(f"Threshold_value: {THRESHOLD_VALUE}")
     if TAKE_PART != 1:
         f.write(f"Part of dataset: {TAKE_PART}\n")
 
@@ -71,6 +100,7 @@ def save_to_file(rates):
     f.writelines(results)
 
     f.close
+
 
 if __name__ == "__main__":
     perceptron = MLP(PROBLEM_TYPE, LAYERS, ACTIVATION_FUNCTION,
