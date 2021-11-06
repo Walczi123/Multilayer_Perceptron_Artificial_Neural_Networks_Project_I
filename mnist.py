@@ -52,7 +52,6 @@ if THRESHOLD:
     train_X = threshold_images(train_X, THRESHOLD_VALUE)
     test_X = threshold_images(test_X, THRESHOLD_VALUE)
 
-
 train_dataset = []
 # r = len(train_X)
 r_train = int(len(train_X)/TAKE_PART)
@@ -77,14 +76,12 @@ LAYERS = [image_len, 700, 500, classes_no]
 EPOCHS = 20
 LEARINN_RATE = 0.001
 SEED = 1231
-SHOW_PERCENTAGE = 0.01
+SHOW_PERCENTAGE = 10
 BIAS = True
 
-
-def save_to_file(rate):
+def save_to_file(rates):
     timestr = time.strftime("%d_%m_%Y-%H_%M-%S")
     f = open(f"minst/MNIST_{timestr}", "w")
-    f.write(f"Rate: {rate}\n")
     f.write(f"Layers: {LAYERS}\n")
     f.write(f"Seed: {SEED}\n")
     f.write(f"Learning rate: {LEARINN_RATE}\n")
@@ -96,16 +93,26 @@ def save_to_file(rate):
     f.write(f"Threshold_value: {THRESHOLD_VALUE}")
     if TAKE_PART != 1:
         f.write(f"Part of dataset: {TAKE_PART}\n")
+
+    f.write(f"Epochs;Accuracy\n")
+    results = [f'{str(rates[i][0])};{str(rates[i][1])}\n'
+            for i in range(len(rates))]
+    f.writelines(results)
+
     f.close
 
 
 if __name__ == "__main__":
     perceptron = MLP(PROBLEM_TYPE, LAYERS, ACTIVATION_FUNCTION,
-                     OUTPUT_FUNCTION, LOSS_FUNCTION, EPOCHS, LEARINN_RATE, SEED, BIAS)
+                     OUTPUT_FUNCTION, LOSS_FUNCTION, 1, LEARINN_RATE, SEED, BIAS)
 
-    perceptron.train(train_dataset, SHOW_PERCENTAGE, category_shift=0)
-    rate, _, _ = perceptron.test(
-        test_dataset, SHOW_PERCENTAGE, category_shift=0)
+    rates = []
+    for i in range(EPOCHS):
+        print("Epoch:", i)
+        perceptron.train(train_dataset, category_shift=0)
+        rate, _, _ = perceptron.test(
+            test_dataset, SHOW_PERCENTAGE, category_shift=0)
+        rates.append((i+1, rate))
 
     # for i in range(30):
     #     test_case = perceptron.predict(test_X[500  + i].flatten())
@@ -123,4 +130,4 @@ if __name__ == "__main__":
     # print(len(test_y))
     # print(len(train_dataset))
     # print(len(test_dataset))
-    save_to_file(rate)
+    save_to_file(rates)
