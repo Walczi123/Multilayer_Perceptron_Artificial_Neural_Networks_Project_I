@@ -1,0 +1,7 @@
+Rate: 93.55
+Layers: [784, 700, 500, 10]
+Seed: 1231
+Learning rate: 0.001
+Activation function: sigmoid
+Output function: softmax
+Epochs: 15
