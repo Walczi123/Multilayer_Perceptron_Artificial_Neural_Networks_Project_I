@@ -24,7 +24,7 @@ else:
 # test_y - list of labels of MN IST testing images
 (train_X, train_y), (test_X, test_y) = mnist.load_data()
 
-TAKE_PART = 100
+TAKE_PART = 1
 
 train_dataset = []
 # r = len(train_X)
@@ -47,10 +47,10 @@ OUTPUT_FUNCTION = function_type.Softmax
 LOSS_FUNCTION = function_type.Cross_entropy
 # LAYERS = [image_len, classes_no]
 LAYERS = [image_len, 700, 500, classes_no]
-EPOCHS = 15
+EPOCHS = 20
 LEARINN_RATE = 0.001
 SEED = 1231
-SHOW_PERCENTAGE = 0.01
+SHOW_PERCENTAGE = 10
 BIAS = True
 
 def save_to_file(rates):
@@ -78,7 +78,8 @@ if __name__ == "__main__":
 
     rates = []
     for i in range(EPOCHS):
-        perceptron.train(train_dataset, SHOW_PERCENTAGE, category_shift=0)
+        print("Epoch:", i)
+        perceptron.train(train_dataset, category_shift=0)
         rate, _, _ = perceptron.test(
             test_dataset, SHOW_PERCENTAGE, category_shift=0)
         rates.append((i+1, rate))
