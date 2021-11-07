@@ -14,10 +14,13 @@ def indentity(x):
 def indentity_derivative(x):
     return 1
 
-def softmax(x):
-    exps = np.exp(x - np.max(x, keepdims=True))
-    return exps / np.sum(exps, keepdims=True)
+# def softmax(x):
+#     exps = np.exp(x - np.max(x, keepdims=True))
+#     return exps / np.sum(exps, keepdims=True)
 
+def softmax(x):
+    exps = np.exp(x)
+    return exps / exps.sum()
 
 def softmax_derivative(x):
     sx = softmax(x)
@@ -32,9 +35,13 @@ def tanh_derivative(x):
 def relu(x):
     return np.maximum(x, 0)
 
-
 def relu_derivative(x):
-    return np.greater(x, 0).astype(int)
+    return np.array([relu_derivative_single(xi) for xi in x])
+
+def relu_derivative_single(x):
+    if x > 0:
+        return 0
+    return 1
 
 # def cross_entropy(predictions, targets, epsilon=1e-12):
 #     # predictions = np.clip(predictions, epsilon, 1. - epsilon)
