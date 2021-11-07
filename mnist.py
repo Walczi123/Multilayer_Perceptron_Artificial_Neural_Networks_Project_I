@@ -41,7 +41,7 @@ else:
 
 TAKE_PART = 100
 INVERT = False
-THRESHOLD = True
+THRESHOLD = False
 THRESHOLD_VALUE = 127
 
 if INVERT:
@@ -68,7 +68,7 @@ for idx in range(r_test):
 image_len = 28 * 28
 classes_no = unique = len(np.unique(train_y))
 PROBLEM_TYPE = problem_type.Classification
-ACTIVATION_FUNCTION = function_type.Sigmoid
+ACTIVATION_FUNCTION = function_type.Tanh
 OUTPUT_FUNCTION = function_type.Softmax
 LOSS_FUNCTION = function_type.Cross_entropy
 # LAYERS = [image_len, classes_no]
@@ -88,9 +88,9 @@ def save_to_file(rates):
     f.write(f"Activation function: {ACTIVATION_FUNCTION.__name__}\n")
     f.write(f"Output function: {OUTPUT_FUNCTION.__name__}\n")
     f.write(f"Epochs: {EPOCHS}\n")
-    f.write(f"Inverted: {INVERT}")
-    f.write(f"Thresholded: {THRESHOLD}")
-    f.write(f"Threshold_value: {THRESHOLD_VALUE}")
+    f.write(f"Inverted: {INVERT}\n")
+    f.write(f"Thresholded: {THRESHOLD}\n")
+    f.write(f"Threshold_value: {THRESHOLD_VALUE}\n")
     if TAKE_PART != 1:
         f.write(f"Part of dataset: {TAKE_PART}\n")
 
@@ -107,9 +107,10 @@ if __name__ == "__main__":
                      OUTPUT_FUNCTION, LOSS_FUNCTION, 1, LEARINN_RATE, SEED, BIAS)
 
     rates = []
+    np.random.shuffle(train_dataset)
     for i in range(EPOCHS):
         print("Epoch:", i)
-        perceptron.train(train_dataset, category_shift=0)
+        perceptron.train(train_dataset, category_shift=0, shuffle=False)
         rate, _, _ = perceptron.test(
             test_dataset, SHOW_PERCENTAGE, category_shift=0)
         rates.append((i+1, rate))

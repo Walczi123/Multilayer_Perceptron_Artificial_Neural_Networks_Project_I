@@ -77,7 +77,7 @@ class MLP:
             if self.bias:
                 self.biases[tmp_i] -= self.learning_rate * D_biases[i]
 
-    def train(self, dataset, show_percentage=1, category_shift=1):
+    def train(self, dataset, show_percentage=1, category_shift=1, shuffle = True):
         print_flag = show_percentage != -1
         if print_flag:
             print('----START TRAINING----')
@@ -90,7 +90,8 @@ class MLP:
                 y_tmp[int(row[1]) - category_shift] = 1
                 dataset_tmp.append([np.array(row[0]), y_tmp])
             dataset = dataset_tmp
-        np.random.shuffle(dataset)
+        if shuffle:
+            np.random.shuffle(dataset)
         for i in range(self.epochs):
             for X, Y in dataset:
                 output, z = self.feed_forward(X)
