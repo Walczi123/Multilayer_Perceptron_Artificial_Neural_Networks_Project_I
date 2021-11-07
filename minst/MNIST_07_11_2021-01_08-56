@@ -1,0 +1,31 @@
+Layers: [784, 512, 512, 10]
+Seed: 1231
+Learning rate: 0.001
+Activation function: tanh
+Output function: softmax
+Epochs: 20
+Inverted: False
+Thresholded: False
+Threshold_value: 127
+Part of dataset: 100
+Epochs;Accuracy
+1;50.0
+2;60.0
+3;74.0
+4;76.0
+5;68.0
+6;72.0
+7;76.0
+8;76.0
+9;79.0
+10;78.0
+11;76.0
+12;82.0
+13;81.0
+14;77.0
+15;81.0
+16;82.0
+17;82.0
+18;80.0
+19;85.0
+20;82.0
