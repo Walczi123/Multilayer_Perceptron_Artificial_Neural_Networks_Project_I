@@ -48,14 +48,12 @@ class MLP:
                 tmp += self.biases[i]
             z.append(np.array(tmp))
             if i < (len(self.weights) - 1):
-                # tmp = np.array([self.activation_function(x) for x in tmp])
-                tmp = np.array(self.activation_function(tmp))
+                tmp = np.array([self.activation_function(x) for x in tmp])
             else:
-                # if self.problem_type == problem_type.Classification:
-                #     tmp = np.array([self.activation_function(x) for x in tmp])
-                # elif self.problem_type == problem_type.Regression:
-                #     tmp = np.array([self.output_function(x) for x in tmp])
-                tmp = np.array(self.output_function(tmp))
+                if self.problem_type == problem_type.Classification:
+                    tmp = np.array([self.activation_function(x) for x in tmp])
+                elif self.problem_type == problem_type.Regression:
+                    tmp = np.array([self.output_function(x) for x in tmp])
             output.append(tmp)
         return output, z
 
@@ -111,7 +109,7 @@ class MLP:
     def predict(self, data, category_shift=1):
         prediction = self.feed_forward(data)[0][-1]
         if self.problem_type == problem_type.Classification:
-            # prediction = self.output_function(prediction)
+            prediction = self.output_function(prediction)
             prediction = np.argmax(prediction) + category_shift
         return prediction
 
