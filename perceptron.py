@@ -55,10 +55,7 @@ class MLP:
                 #     tmp = np.array([self.activation_function(x) for x in tmp])
                 # elif self.problem_type == problem_type.Regression:
                 #     tmp = np.array([self.output_function(x) for x in tmp])
-                # print('tmp before', tmp)
                 tmp = np.array(self.output_function(tmp))
-                # print('tmp after', tmp)
-                # input()
             output.append(tmp)
         return output, z
 
