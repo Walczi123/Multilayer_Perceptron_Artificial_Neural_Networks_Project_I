@@ -14,10 +14,13 @@ def indentity(x):
 def indentity_derivative(x):
     return 1
 
-def softmax(x):
-    exps = np.exp(x - np.max(x, keepdims=True))
-    return exps / np.sum(exps, keepdims=True)
+# def softmax(x):
+#     exps = np.exp(x - np.max(x, keepdims=True))
+#     return exps / np.sum(exps, keepdims=True)
 
+def softmax(x):
+    exps = np.exp(x)
+    return exps / exps.sum()
 
 def softmax_derivative(x):
     sx = softmax(x)
@@ -31,7 +34,6 @@ def tanh_derivative(x):
 
 def relu(x):
     return np.maximum(x, 0)
-
 
 def relu_derivative(x):
     return np.greater(x, 0).astype(int)
