@@ -39,9 +39,9 @@ else:
 # test_y - list of labels of MN IST testing images
 (train_X, train_y), (test_X, test_y) = mnist.load_data()
 
-TAKE_PART = 100
-INVERT = False
-THRESHOLD = False
+TAKE_PART = 1
+INVERT = True
+THRESHOLD = True
 THRESHOLD_VALUE = 127
 
 if INVERT:
@@ -68,12 +68,12 @@ for idx in range(r_test):
 image_len = 28 * 28
 classes_no = unique = len(np.unique(train_y))
 PROBLEM_TYPE = problem_type.Classification
-ACTIVATION_FUNCTION = function_type.Tanh
+ACTIVATION_FUNCTION = function_type.Sigmoid
 OUTPUT_FUNCTION = function_type.Softmax
 LOSS_FUNCTION = function_type.Cross_entropy
 # LAYERS = [image_len, classes_no]
 LAYERS = [image_len, 700, 500, classes_no]
-EPOCHS = 20
+EPOCHS = 50
 LEARINN_RATE = 0.001
 SEED = 1231
 SHOW_PERCENTAGE = 10
