@@ -39,7 +39,7 @@ else:
 # test_y - list of labels of MN IST testing images
 (train_X, train_y), (test_X, test_y) = mnist.load_data()
 
-TAKE_PART = 1
+TAKE_PART = 100
 INVERT = True
 THRESHOLD = False
 THRESHOLD_VALUE = 127
@@ -75,9 +75,9 @@ LOSS_FUNCTION = function_type.Cross_entropy
 LAYERS = [image_len, 700, 500, classes_no]
 EPOCHS = 1000
 LEARINN_RATE = 0.0003
-SEED = 51
+SEED = 1231
 SHOW_PERCENTAGE = 10
-BIAS = True
+BIAS = False
 
 def save_to_file_header(path):
     f = open(path, "w")
@@ -87,6 +87,7 @@ def save_to_file_header(path):
     f.write(f"Activation function: {ACTIVATION_FUNCTION.__name__}\n")
     f.write(f"Output function: {OUTPUT_FUNCTION.__name__}\n")
     f.write(f"Epochs: {EPOCHS}\n")
+    f.write(f"BIAS: {BIAS}\n")
     f.write(f"Inverted: {INVERT}\n")
     f.write(f"Thresholded: {THRESHOLD}\n")
     f.write(f"Threshold_value: {THRESHOLD_VALUE}\n")
