@@ -1,0 +1,31 @@
+Layers: [784, 700, 500, 10]
+Seed: 1231
+Learning rate: 0.001
+Activation function: sigmoid
+Output function: softmax
+Epochs: 20
+Inverted: False
+Thresholded: False
+Threshold_value: 127
+Part of dataset: 200
+Epochs;Accuracy
+1;26.0
+2;36.0
+3;42.0
+4;42.0
+5;48.0
+6;57.99999999999999
+7;57.99999999999999
+8;60.0
+9;60.0
+10;64.0
+11;68.0
+12;70.0
+13;70.0
+14;74.0
+15;76.0
+16;76.0
+17;78.0
+18;78.0
+19;78.0
+20;78.0
