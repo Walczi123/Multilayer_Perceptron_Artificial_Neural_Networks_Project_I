@@ -74,8 +74,8 @@ LOSS_FUNCTION = function_type.Cross_entropy
 # LAYERS = [image_len, classes_no]
 LAYERS = [image_len, 700, 500, classes_no]
 EPOCHS = 1000
-LEARINN_RATE = 0.001
-SEED = 1231
+LEARINN_RATE = 0.0003
+SEED = 51
 SHOW_PERCENTAGE = 10
 BIAS = True
 
@@ -106,7 +106,7 @@ if __name__ == "__main__":
                      OUTPUT_FUNCTION, LOSS_FUNCTION, 1, LEARINN_RATE, SEED, BIAS)
 
     timestr = time.strftime("%d_%m_%Y-%H_%M-%S")
-    path = f"minst/MNIST_{timestr}"
+    path = f"minst/BIG_MNIST_{timestr}"
     save_to_file_header(path)
 
     max = 0
