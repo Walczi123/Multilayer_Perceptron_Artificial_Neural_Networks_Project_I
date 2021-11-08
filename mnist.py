@@ -39,14 +39,14 @@ else:
 # test_y - list of labels of MN IST testing images
 (train_X, train_y), (test_X, test_y) = mnist.load_data()
 
-TAKE_PART = 100
-INVERT = False
+TAKE_PART = 1
+INVERT = True
 THRESHOLD = False
 THRESHOLD_VALUE = 127
 
 if INVERT:
     train_X = invert_images(train_X)
-    test_Y = invert_images(test_X)
+    test_X = invert_images(test_X)
 
 if THRESHOLD:
     train_X = threshold_images(train_X, THRESHOLD_VALUE)
@@ -74,8 +74,8 @@ LOSS_FUNCTION = function_type.Cross_entropy
 # LAYERS = [image_len, classes_no]
 LAYERS = [image_len, 700, 500, classes_no]
 EPOCHS = 1000
-LEARINN_RATE = 0.0075
-SEED = 1231
+LEARINN_RATE = 0.0003
+SEED = 51
 SHOW_PERCENTAGE = 10
 BIAS = True
 
@@ -106,7 +106,7 @@ if __name__ == "__main__":
                      OUTPUT_FUNCTION, LOSS_FUNCTION, 1, LEARINN_RATE, SEED, BIAS)
 
     timestr = time.strftime("%d_%m_%Y-%H_%M-%S")
-    path = f"minst/MNIST_{timestr}"
+    path = f"minst/BIG_MNIST_{timestr}"
     save_to_file_header(path)
 
     max = 0
@@ -121,6 +121,9 @@ if __name__ == "__main__":
             max = rate
             max_epoch = i+1
         save_to_file_rate(path,(i+1, rate, max_epoch, max))
+
+
+
 
     # for i in range(30):
     #     test_case = perceptron.predict(test_X[500  + i].flatten())
