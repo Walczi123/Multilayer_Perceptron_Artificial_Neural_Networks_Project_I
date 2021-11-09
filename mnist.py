@@ -107,7 +107,7 @@ if __name__ == "__main__":
                      OUTPUT_FUNCTION, LOSS_FUNCTION, 1, LEARINN_RATE, SEED, BIAS)
 
     timestr = time.strftime("%d_%m_%Y-%H_%M-%S")
-    path = f"minst/BIG_MNIST_{timestr}"
+    path = f"mnist/BIG_MNIST_{timestr}"
     save_to_file_header(path)
 
     max = 0
