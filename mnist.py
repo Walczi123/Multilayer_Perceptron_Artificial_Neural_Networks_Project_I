@@ -39,8 +39,8 @@ else:
 # test_y - list of labels of MN IST testing images
 (train_X, train_y), (test_X, test_y) = mnist.load_data()
 
-TAKE_PART = 100
-INVERT = True
+TAKE_PART = 1
+INVERT = False
 THRESHOLD = False
 THRESHOLD_VALUE = 127
 
@@ -72,10 +72,10 @@ ACTIVATION_FUNCTION = function_type.Sigmoid
 OUTPUT_FUNCTION = function_type.Softmax
 LOSS_FUNCTION = function_type.Cross_entropy
 # LAYERS = [image_len, classes_no]
-LAYERS = [image_len, 700, 500, classes_no]
+LAYERS = [image_len, 512, classes_no]
 EPOCHS = 1000
 LEARINN_RATE = 0.0003
-SEED = 1231
+SEED = 51
 SHOW_PERCENTAGE = 10
 BIAS = False
 
@@ -123,23 +123,3 @@ if __name__ == "__main__":
             max_epoch = i+1
         save_to_file_rate(path,(i+1, rate, max_epoch, max))
 
-
-
-
-    # for i in range(30):
-    #     test_case = perceptron.predict(test_X[500  + i].flatten())
-    #     pyplot.title(label=f"Label: {test_y[500 + i]} - Predicted: {test_case}")
-    #     pyplot.imshow(test_X[500 + i], cmap=pyplot.get_cmap('gray'))
-    #     pyplot.show()
-
-    # print(train_X[0])
-    # print(train_X[0].shape)
-    # print(train_X[0].flatten())
-    # print(train_X[0].flatten().shape)
-    # print(len(train_X))
-    # print(len(train_y))
-    # print(len(test_X))
-    # print(len(test_y))
-    # print(len(train_dataset))
-    # print(len(test_dataset))
-    # save_to_file(rates)
